@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/html5-qrcode"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     body { background-color: #061f12; color: #f0fdf4; font-family: sans-serif; translate: no; }
   </style>
@@ -51,37 +50,32 @@
       </div>
     </div>
 
-    <!-- ABAS PRINCIPAIS: APENAS DUAS OPÇÕES -->
+    <!-- ABAS PRINCIPAIS -->
     <div class="flex bg-emerald-950 p-1 rounded-xl border border-emerald-800 text-sm">
-      <button id="tab-recargar" onclick="mudarAba('recargar')" class="flex-1 py-3 rounded-lg font-bold text-emerald-300 bg-emerald-900 shadow">1. Comprar Crédito (Pix)</button>
+      <button id="tab-recargar" onclick="mudarAba('recargar')" class="flex-1 py-3 rounded-lg font-bold text-emerald-300 bg-emerald-900 shadow">1. Comprar Crédito</button>
       <button id="tab-pagar" onclick="mudarAba('pagar')" class="flex-1 py-3 rounded-lg font-medium text-emerald-400">2. Pagar no Balcão</button>
     </div>
 
-    <!-- ABA 1: COMPRAR CRÉDITO COM QR CODE E PIX -->
+    <!-- ABA 1: COMPRAR CRÉDITO COM OS BOTÕES DE R$ 20 E R$ 50 -->
     <div id="conteudo-recargar" class="space-y-4">
       <div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5 space-y-4 text-center">
-        <h2 class="font-semibold text-white mb-1">Recarregar Crédito via Pix</h2>
-        <p class="text-xs text-emerald-400 mb-2">Mostre este QR Code ou a Chave Pix para o responsável pagar:</p>
+        <h2 class="font-semibold text-white mb-1">Escolha o Valor do Crédito</h2>
+        <p class="text-xs text-emerald-400 mb-4">Selecione uma opção para pagar com o Mercado Pago:</p>
         
-        <div class="flex justify-center p-4 bg-white rounded-2xl inline-block mx-auto shadow-inner" id="qrcode-pix-container"></div>
-
-        <div class="bg-emerald-900/80 border border-emerald-600 p-3 rounded-xl space-y-1">
-          <span class="text-[10px] uppercase tracking-wider text-emerald-200 font-bold block"><i class="fa-solid fa-key mr-1"></i> Chave Pix (CPF)</span>
-          <div class="text-white font-mono font-bold text-lg tracking-wider" id="texto-chave-pix">00305690280</div>
-          <button onclick="copiarChavePix()" class="mt-1 text-xs bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg font-bold transition">
-            <i class="fa-solid fa-copy mr-1"></i> Copiar Chave Pix
-          </button>
+        <div class="grid grid-cols-2 gap-3">
+          <a href="https://link.mercadopago.com.br/dolarcanopus" target="_blank" onclick="registrarTentativaRecarga(20)" class="bg-emerald-700 hover:bg-emerald-600 border border-emerald-500 p-4 rounded-xl text-white font-black text-xl shadow-lg transition flex flex-col items-center justify-center space-y-1">
+            <span>R$ 20,00</span>
+            <span class="text-[10px] text-emerald-200 font-normal">Comprar R$ 20</span>
+          </a>
+          <a href="https://link.mercadopago.com.br/dolarcanopus" target="_blank" onclick="registrarTentativaRecarga(50)" class="bg-emerald-700 hover:bg-emerald-600 border border-emerald-500 p-4 rounded-xl text-white font-black text-xl shadow-lg transition flex flex-col items-center justify-center space-y-1">
+            <span>R$ 50,00</span>
+            <span class="text-[10px] text-emerald-200 font-normal">Comprar R$ 50</span>
+          </a>
         </div>
 
-        <div class="border-t border-emerald-800/80 pt-4 space-y-3">
-          <p class="text-xs text-emerald-300">Pagou no banco? Adicione o saldo na carteira abaixo:</p>
-          
-          <input type="number" id="valor-recarga-efetuada" placeholder="Valor pago (Ex: 20.00)" class="w-full bg-emerald-900 border border-emerald-800 rounded-xl p-3 text-white text-center text-lg font-bold">
-          
-          <button onclick="adicionarCreditoAprovado()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-extrabold py-3.5 rounded-xl text-sm transition shadow-lg flex items-center justify-center space-x-2">
-            <i class="fa-solid fa-circle-check text-base"></i>
-            <span>Adicionar Crédito à Carteira</span>
-          </button>
+        <div class="bg-emerald-900/40 border border-emerald-800 p-3 rounded-xl text-left space-y-1 mt-4">
+          <p class="text-xs text-emerald-300 font-semibold"><i class="fa-solid fa-circle-info mr-1 text-emerald-400"></i> Aviso importante:</p>
+          <p class="text-[11px] text-emerald-400 leading-relaxed">Ao clicar em um dos botões, você será direcionado para o pagamento seguro. O crédito entra na carteira após a confirmação do pagamento na conta.</p>
         </div>
       </div>
     </div>
@@ -124,8 +118,6 @@
   </div>
 
   <script>
-    const MINHA_CHAVE_PIX_CPF = "00305690280";
-
     let usuarioAtual = localStorage.getItem('credito_canopus_usuario_atual') || "Cliente";
     let dadosApp = JSON.parse(localStorage.getItem('credito_canopus_db')) || { usuarios: {} };
     let html5QrCode = null, pendentePagamento = null;
@@ -136,13 +128,6 @@
         salvardb();
       }
       atualizarTela();
-      document.getElementById('texto-chave-pix').innerText = MINHA_CHAVE_PIX_CPF;
-      
-      new QRCode(document.getElementById('qrcode-pix-container'), {
-        text: MINHA_CHAVE_PIX_CPF,
-        width: 160,
-        height: 160
-      });
     };
 
     function salvardb() { localStorage.setItem('credito_canopus_db', JSON.stringify(dadosApp)); }
@@ -176,7 +161,7 @@
 
     function compartilharApp() {
       const url = window.location.href;
-      const texto = `🌿 Crédito Canopus - Carteira Digital\nAbra o link, coloque o seu nome e recarregue via QR Code Pix para comprar no mercadinho!\n\n${url}`;
+      const texto = `🌿 Crédito Canopus - Carteira Digital\nAbra o link, coloque o seu nome e escolha o valor para comprar no mercadinho!\n\n${url}`;
       if (navigator.share) { navigator.share({ title: 'Crédito Canopus', text: texto, url }).catch(()=>{}); }
       else { navigator.clipboard.writeText(texto); alert("Link copiado para enviar no WhatsApp!"); }
     }
@@ -203,6 +188,7 @@
       pendentePagamento = { loja, desc, valor };
       document.getElementById('modal-loja-nome').innerText = loja;
       document.getElementById('modal-loja-valor').innerText = `R$ ${valor.toFixed(2).replace('.', ',')}`;
+      document.getElementById('modal-confirmar').classList.add('hidden'); // Ajustado para fechar ou abrir o modal corretamente
       document.getElementById('modal-confirmar').classList.remove('hidden');
     }
 
@@ -217,23 +203,8 @@
       salvardb(); atualizarTela(); fecharModal(); alert("Pagamento realizado com sucesso!");
     }
 
-    function copiarChavePix() {
-      navigator.clipboard.writeText(MINHA_CHAVE_PIX_CPF);
-      alert("Chave Pix CPF (00305690280) copiada! Cole no aplicativo do banco.");
-    }
-
-    function adicionarCreditoAprovado() {
-      const valor = parseFloat(document.getElementById('valor-recarga-efetuada').value);
-      if(!valor || valor <= 0) { alert("Informe o valor que foi pago."); return; }
-
-      const user = dadosApp.usuarios[usuarioAtual];
-      user.saldo += valor;
-      user.historico.unshift({ tipo: 'entrada', desc: 'Recarga Pix Mercado Pago', valor: valor, data: new Date().toLocaleDateString('pt-BR') });
-      salvardb(); 
-      atualizarTela();
-      
-      document.getElementById('valor-recarga-efetuada').value = "";
-      alert(`Sucesso! R$ ${valor.toFixed(2)} adicionados à carteira de ${usuarioAtual}.`);
+    function registrarTentativaRecarga(valor) {
+      // Função apenas informativa ao clicar no botão de pagamento do Mercado Pago
     }
   </script>
 </body>
