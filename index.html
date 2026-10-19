@@ -22,12 +22,12 @@
         </div>
         <div>
           <h1 class="font-bold text-lg text-emerald-100 leading-tight">Crédito Canopus 🌿</h1>
-          <p class="text-xs text-emerald-400">Carteira Digital & Pagamentos</p>
+          <p class="text-xs text-emerald-400">Mercadinho Digital</p>
         </div>
       </div>
       
       <div class="flex items-center space-x-2">
-        <button onclick="compartilharApp()" class="text-xs bg-emerald-800 text-emerald-200 border border-emerald-600 p-2 rounded-xl flex items-center justify-center">
+        <button onclick="compartilharApp()" class="text-xs bg-emerald-800 text-emerald-200 border border-emerald-600 p-2 rounded-xl flex items-center justify-center" title="Compartilhar App">
           <i class="fa-solid fa-share-nodes text-sm"></i>
         </button>
         <button onclick="trocarUsuario()" class="text-xs bg-emerald-900 border border-emerald-700 px-3 py-2 rounded-xl flex items-center space-x-1.5 text-emerald-200">
@@ -51,42 +51,30 @@
       </div>
     </div>
 
+    <!-- ABAS PRINCIPAIS: APENAS DUAS OPÇÕES -->
     <div class="flex bg-emerald-950 p-1 rounded-xl border border-emerald-800 text-sm">
-      <button id="tab-pagar" onclick="mudarAba('pagar')" class="flex-1 py-2.5 rounded-lg font-medium text-emerald-300 bg-emerald-900 shadow">Pagar (Câmera)</button>
-      <button id="tab-recargar" onclick="mudarAba('recargar')" class="flex-1 py-2.5 rounded-lg font-medium text-emerald-400">Colocar Crédito</button>
-      <button id="tab-receber" onclick="mudarAba('receber')" class="flex-1 py-2.5 rounded-lg font-medium text-emerald-400">Receber (Cobrar)</button>
+      <button id="tab-recargar" onclick="mudarAba('recargar')" class="flex-1 py-3 rounded-lg font-bold text-emerald-300 bg-emerald-900 shadow">1. Comprar Crédito (Pix)</button>
+      <button id="tab-pagar" onclick="mudarAba('pagar')" class="flex-1 py-3 rounded-lg font-medium text-emerald-400">2. Pagar no Balcão</button>
     </div>
 
-    <div id="conteudo-pagar" class="space-y-4">
-      <div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5 text-center">
-        <h2 class="font-semibold text-white mb-1">Escanear QR Code do Mercadinho</h2>
-        <p class="text-xs text-emerald-400 mb-4">Aponte a câmera para o QR Code no balcão para pagar.</p>
-        <div id="reader-container" class="relative rounded-xl overflow-hidden bg-slate-950 border border-emerald-800 min-h-[220px] flex items-center justify-center">
-          <div id="reader" class="w-full"></div>
-          <div id="reader-placeholder" class="text-center p-6 space-y-3">
-            <i class="fa-solid fa-qrcode text-4xl text-emerald-500/50"></i>
-            <p class="text-xs text-emerald-400">Clique abaixo para ativar a câmera.</p>
-          </div>
-        </div>
-        <button onclick="iniciarCamera()" class="w-full mt-4 bg-emerald-500 text-emerald-950 font-bold py-3 rounded-xl flex items-center justify-center space-x-2">
-          <i class="fa-solid fa-camera"></i><span>Ativar Câmera</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- ABA DE RECARGA COM O LINK DO MERCADO PAGO -->
-    <div id="conteudo-recargar" class="hidden space-y-4">
+    <!-- ABA 1: COMPRAR CRÉDITO COM QR CODE E PIX -->
+    <div id="conteudo-recargar" class="space-y-4">
       <div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5 space-y-4 text-center">
-        <h2 class="font-semibold text-white mb-1">Recarregar Crédito Online</h2>
-        <p class="text-xs text-emerald-400 mb-2">Pague com segurança pelo Mercado Pago e adicione o saldo na carteira:</p>
+        <h2 class="font-semibold text-white mb-1">Recarregar Crédito via Pix</h2>
+        <p class="text-xs text-emerald-400 mb-2">Mostre este QR Code ou a Chave Pix para o responsável pagar:</p>
         
-        <a href="https://link.mercadopago.com.br/dolarcanopus" target="_blank" class="w-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-black py-4 rounded-xl text-base transition shadow-lg flex items-center justify-center space-x-2 block">
-          <i class="fa-solid fa-wallet text-xl"></i>
-          <span>Pagar no Mercado Pago</span>
-        </a>
+        <div class="flex justify-center p-4 bg-white rounded-2xl inline-block mx-auto shadow-inner" id="qrcode-pix-container"></div>
 
-        <div class="border-t border-emerald-800/80 pt-4 mt-4 space-y-3">
-          <p class="text-xs text-emerald-300">Já fez o pagamento no Mercado Pago? Adicione o valor na sua carteira abaixo:</p>
+        <div class="bg-emerald-900/80 border border-emerald-600 p-3 rounded-xl space-y-1">
+          <span class="text-[10px] uppercase tracking-wider text-emerald-200 font-bold block"><i class="fa-solid fa-key mr-1"></i> Chave Pix (CPF)</span>
+          <div class="text-white font-mono font-bold text-lg tracking-wider" id="texto-chave-pix">00305690280</div>
+          <button onclick="copiarChavePix()" class="mt-1 text-xs bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg font-bold transition">
+            <i class="fa-solid fa-copy mr-1"></i> Copiar Chave Pix
+          </button>
+        </div>
+
+        <div class="border-t border-emerald-800/80 pt-4 space-y-3">
+          <p class="text-xs text-emerald-300">Pagou no banco? Adicione o saldo na carteira abaixo:</p>
           
           <input type="number" id="valor-recarga-efetuada" placeholder="Valor pago (Ex: 20.00)" class="w-full bg-emerald-900 border border-emerald-800 rounded-xl p-3 text-white text-center text-lg font-bold">
           
@@ -98,18 +86,21 @@
       </div>
     </div>
 
-    <div id="conteudo-receber" class="hidden space-y-4">
-      <div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5">
-        <h2 class="font-semibold text-white mb-1">Cobrar no Mercadinho</h2>
-        <div class="space-y-3 mt-3">
-          <input type="number" id="valor-cobrativo" placeholder="Valor (R$ 5.00)" class="w-full bg-emerald-900 border border-emerald-800 rounded-xl p-3 text-white">
-          <input type="text" id="desc-cobrativo" placeholder="Descrição (Ex: Lanche)" class="w-full bg-emerald-900 border border-emerald-800 rounded-xl p-3 text-white">
-          <button onclick="gerarQrCodeCobranca()" class="w-full bg-emerald-500 text-emerald-950 font-bold py-3 rounded-xl">Gerar QR Code</button>
+    <!-- ABA 2: PAGAR COM A CÂMERA -->
+    <div id="conteudo-pagar" class="hidden space-y-4">
+      <div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5 text-center">
+        <h2 class="font-semibold text-white mb-1">Escanear QR Code do Mercadinho</h2>
+        <p class="text-xs text-emerald-400 mb-4">Aponte a câmera para o QR Code da compra para pagar com o saldo.</p>
+        <div id="reader-container" class="relative rounded-xl overflow-hidden bg-slate-950 border border-emerald-800 min-h-[220px] flex items-center justify-center">
+          <div id="reader" class="w-full"></div>
+          <div id="reader-placeholder" class="text-center p-6 space-y-3">
+            <i class="fa-solid fa-qrcode text-4xl text-emerald-500/50"></i>
+            <p class="text-xs text-emerald-400">Clique abaixo para ativar a câmera.</p>
+          </div>
         </div>
-        <div id="box-qr-cobranca" class="hidden mt-6 pt-6 border-t border-emerald-800 text-center space-y-3">
-          <p class="text-sm font-semibold text-white" id="titulo-cobranca">Mercadinho Canopus</p>
-          <div id="canvas-qr-cobranca" class="flex justify-center p-3 bg-white rounded-2xl inline-block mx-auto"></div>
-        </div>
+        <button onclick="iniciarCamera()" class="w-full mt-4 bg-emerald-500 text-emerald-950 font-bold py-3 rounded-xl flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-camera"></i><span>Ativar Câmera</span>
+        </button>
       </div>
     </div>
 
@@ -133,6 +124,8 @@
   </div>
 
   <script>
+    const MINHA_CHAVE_PIX_CPF = "00305690280";
+
     let usuarioAtual = localStorage.getItem('credito_canopus_usuario_atual') || "Cliente";
     let dadosApp = JSON.parse(localStorage.getItem('credito_canopus_db')) || { usuarios: {} };
     let html5QrCode = null, pendentePagamento = null;
@@ -143,6 +136,13 @@
         salvardb();
       }
       atualizarTela();
+      document.getElementById('texto-chave-pix').innerText = MINHA_CHAVE_PIX_CPF;
+      
+      new QRCode(document.getElementById('qrcode-pix-container'), {
+        text: MINHA_CHAVE_PIX_CPF,
+        width: 160,
+        height: 160
+      });
     };
 
     function salvardb() { localStorage.setItem('credito_canopus_db', JSON.stringify(dadosApp)); }
@@ -176,18 +176,18 @@
 
     function compartilharApp() {
       const url = window.location.href;
-      const texto = `🌿 Crédito Canopus - Carteira Digital\nAbra o link, coloque o seu nome e recarregue com facilidade para comprar no mercadinho!\n\n${url}`;
+      const texto = `🌿 Crédito Canopus - Carteira Digital\nAbra o link, coloque o seu nome e recarregue via QR Code Pix para comprar no mercadinho!\n\n${url}`;
       if (navigator.share) { navigator.share({ title: 'Crédito Canopus', text: texto, url }).catch(()=>{}); }
       else { navigator.clipboard.writeText(texto); alert("Link copiado para enviar no WhatsApp!"); }
     }
 
     function mudarAba(aba) {
-      ['pagar', 'recargar', 'receber'].forEach(a => {
+      ['recargar', 'pagar'].forEach(a => {
         document.getElementById(`conteudo-${a}`).classList.add('hidden');
-        document.getElementById(`tab-${a}`).className = "flex-1 py-2.5 rounded-lg font-medium text-emerald-400";
+        document.getElementById(`tab-${a}`).className = "flex-1 py-3 rounded-lg font-medium text-emerald-400";
       });
       document.getElementById(`conteudo-${aba}`).classList.remove('hidden');
-      document.getElementById(`tab-${aba}`).className = "flex-1 py-2.5 rounded-lg font-medium text-emerald-300 bg-emerald-900 shadow";
+      document.getElementById(`tab-${aba}`).className = "flex-1 py-3 rounded-lg font-bold text-emerald-300 bg-emerald-900 shadow";
       if(aba !== 'pagar' && html5QrCode && html5QrCode.isScanning) html5QrCode.stop();
     }
 
@@ -217,29 +217,23 @@
       salvardb(); atualizarTela(); fecharModal(); alert("Pagamento realizado com sucesso!");
     }
 
+    function copiarChavePix() {
+      navigator.clipboard.writeText(MINHA_CHAVE_PIX_CPF);
+      alert("Chave Pix CPF (00305690280) copiada! Cole no aplicativo do banco.");
+    }
+
     function adicionarCreditoAprovado() {
       const valor = parseFloat(document.getElementById('valor-recarga-efetuada').value);
-      if(!valor || valor <= 0) { alert("Informe o valor que foi pago no Mercado Pago."); return; }
+      if(!valor || valor <= 0) { alert("Informe o valor que foi pago."); return; }
 
       const user = dadosApp.usuarios[usuarioAtual];
       user.saldo += valor;
-      user.historico.unshift({ tipo: 'entrada', desc: 'Recarga Mercado Pago', valor: valor, data: new Date().toLocaleDateString('pt-BR') });
+      user.historico.unshift({ tipo: 'entrada', desc: 'Recarga Pix Mercado Pago', valor: valor, data: new Date().toLocaleDateString('pt-BR') });
       salvardb(); 
       atualizarTela();
       
       document.getElementById('valor-recarga-efetuada').value = "";
       alert(`Sucesso! R$ ${valor.toFixed(2)} adicionados à carteira de ${usuarioAtual}.`);
-    }
-
-    function gerarQrCodeCobranca() {
-      const valor = parseFloat(document.getElementById('valor-cobrativo').value);
-      if(!valor || valor <= 0) { alert("Informe o valor da cobrança."); return; }
-      const payload = JSON.stringify({ loja: "Mercadinho Canopus", desc: document.getElementById('desc-cobrativo').value || 'Compra Lanche', valor: valor });
-      const container = document.getElementById('canvas-qr-cobranca');
-      container.innerHTML = "";
-      new QRCode(container, { text: payload, width: 180, height: 180 });
-      document.getElementById('titulo-cobranca').innerText = `Mercadinho Canopus - R$ ${valor.toFixed(2)}`;
-      document.getElementById('box-qr-cobranca').classList.remove('hidden');
     }
   </script>
 </body>
