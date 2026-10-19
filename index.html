@@ -1,29 +1,245 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Credito Canopus</title><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><script src="https://unpkg.com/html5-qrcode"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script><style>body{background:#061f12;color:#f0fdf4;font-family:sans-serif}</style></head>
-<body class="min-h-screen pb-24"><header class="bg-emerald-950 border-b border-emerald-500/30 p-4 sticky top-0 z-40"><div class="max-w-md mx-auto flex justify-between items-center"><div class="flex gap-2 items-center"><div class="bg-gradient-to-tr from-emerald-600 to-green-500 p-2 rounded-xl"><i class="fa-solid fa-leaf"></i></div><div><h1 class="font-bold">Credito Canopus 🌿</h1><p class="text-xs text-emerald-400">Valor Aberto Seguro</p></div></div><button onclick="trocarUsuario()" class="text-xs bg-emerald-900 border border-emerald-700 px-3 py-2 rounded-xl"><i class="fa-solid fa-user"></i> <span id="nome-usuario-atual">Mirene</span></button></div></header>
-<main class="max-w-md mx-auto p-4 space-y-5"><div class="bg-emerald-900 border border-emerald-500/30 rounded-2xl p-6"><p class="text-emerald-300 text-xs font-bold uppercase">Saldo</p><div class="flex gap-1 mt-1"><span class="text-emerald-400 text-xl font-bold">R$</span><span id="saldo-display" class="text-4xl font-extrabold">0,00</span></div><div class="mt-4 pt-4 border-t border-emerald-800 flex justify-between text-xs"><span>Titular: <strong id="titular-nome">Mirene</strong></span><span class="text-emerald-400">Ativa</span></div></div>
-<div class="flex bg-emerald-950 p-1 rounded-xl border border-emerald-800 text-sm"><button id="tab-pagar" onclick="mudarAba('pagar')" class="flex-1 py-2.5 rounded-lg bg-emerald-900 font-bold">Pagar</button><button id="tab-recargar" onclick="mudarAba('recargar')" class="flex-1 py-2.5 rounded-lg">Credito</button><button id="tab-receber" onclick="mudarAba('receber')" class="flex-1 py-2.5 rounded-lg">Cobrar</button></div>
-<div id="conteudo-pagar"><div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5 text-center"><h2 class="font-semibold">Escanear QR</h2><div class="rounded-xl overflow-hidden bg-black border border-emerald-800 min-h-[200px] flex items-center justify-center mt-3"><div id="reader" class="w-full"></div><div id="reader-placeholder"><i class="fa-solid fa-qrcode text-4xl text-emerald-500/50"></i></div></div><button onclick="iniciarCamera()" class="w-full mt-4 bg-emerald-500 text-emerald-950 font-bold py-3 rounded-xl">Ativar Camera</button></div></div>
-<div id="conteudo-recargar" class="hidden"><div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5 space-y-3 text-center"><h2 class="font-bold">Credito Valor Livre</h2><p class="text-xs text-emerald-400">Cliente escolhe quanto pagar</p><a href="https://link.mercadopago.com.br/dolarcanopus" target="_blank" class="block w-full bg-blue-500 text-white font-black py-4 rounded-xl">ESCOLHER VALOR E PAGAR NO MP</a><div class="bg-slate-950 border border-amber-500/30 p-4 rounded-xl text-left space-y-2"><p class="text-xs text-amber-200 font-bold">AREA DO DONO</p><input type="password" id="senha-dono" placeholder="Senha canopus123" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center text-sm"><input type="number" id="valor-dono" placeholder="Valor que caiu ex: 7.50" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center text-sm"><div class="grid grid-cols-2 gap-2"><button onclick="liberarCredito()" class="bg-amber-500 text-slate-900 font-bold py-3 rounded-xl text-sm">Liberar</button><button onclick="estornar()" class="bg-rose-900 border border-rose-700 text-rose-200 font-bold py-3 rounded-xl text-sm">Zerar</button></div></div></div></div>
-<div id="conteudo-receber" class="hidden"><div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5"><h2 class="font-semibold">Cobrar Cliente</h2><input type="number" id="valor-cobranca" placeholder="Valor R$ 5.00" class="w-full bg-emerald-900 border border-emerald-800 rounded-xl p-3 text-white mt-3"><input type="text" id="desc-cobranca" placeholder="O que vende?" class="w-full bg-emerald-900 border border-emerald-800 rounded-xl p-3 text-white mt-2"><button onclick="gerarQR()" class="w-full bg-emerald-500 text-emerald-950 font-bold py-3 rounded-xl mt-3">Gerar QR</button><div id="box-qr" class="hidden mt-4 text-center"><div id="qr-code" class="flex justify-center p-3 bg-white rounded-2xl inline-block mx-auto"></div><p id="qr-titulo" class="text-xs mt-2"></p></div></div></div>
-<div class="bg-emerald-950/40 border border-emerald-900 rounded-2xl p-5"><h3 class="text-sm font-semibold mb-3">Historico</h3><div id="lista-historico" class="space-y-2 text-xs"></div></div></main>
-<div id="modal-confirmar" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center p-4 z-50"><div class="bg-emerald-950 border border-emerald-500 rounded-2xl max-w-sm w-full p-6 text-center space-y-4"><h3 class="font-bold" id="modal-nome">Mercadinho</h3><p class="text-2xl font-black text-emerald-400" id="modal-valor">R$ 0,00</p><div class="flex gap-2"><button onclick="fecharModal()" class="flex-1 bg-emerald-900 py-2.5 rounded-xl text-xs">Cancelar</button><button onclick="confirmar()" class="flex-1 bg-emerald-500 text-emerald-950 py-2.5 rounded-xl text-xs font-bold">Confirmar</button></div></div></div>
-<script>
-let usuarioAtual=localStorage.getItem('canopus_user')||'Mirene';
-let dadosApp=JSON.parse(localStorage.getItem('canopus_db_final'))||{usuarios:{}};
-const SENHA_DONO='canopus123';
-let html5QrCode=null,pendente=null;
-if(!dadosApp.usuarios[usuarioAtual]) dadosApp.usuarios[usuarioAtual]={saldo:0,historico:[]};
-function salvar(){localStorage.setItem('canopus_db_final',JSON.stringify(dadosApp));localStorage.setItem('canopus_user',usuarioAtual);}
-function atualizar(){if(!dadosApp.usuarios[usuarioAtual]) dadosApp.usuarios[usuarioAtual]={saldo:0,historico:[]};let u=dadosApp.usuarios[usuarioAtual];document.getElementById('saldo-display').innerText=u.saldo.toFixed(2).replace('.',',');document.getElementById('titular-nome').innerText=usuarioAtual;document.getElementById('nome-usuario-atual').innerText=usuarioAtual;let lista=document.getElementById('lista-historico');if(u.historico.length==0)lista.innerHTML='<p class="text-emerald-700 text-center py-2">Nenhuma mov.</p>';else lista.innerHTML=u.historico.map(i=>`<div class="flex justify-between bg-emerald-900/40 p-2.5 rounded-xl border border-emerald-800"><span>${i.desc}</span><span class="${i.tipo=='entrada'?'text-emerald-400':'text-rose-400'}">${i.tipo=='entrada'?'+':'-'} R$ ${i.valor}</span></div>`).join('');}
-window.onload=()=>atualizar();
-function trocarUsuario(){let n=prompt('Nome:',usuarioAtual);if(n&&n.trim()!=''){usuarioAtual=n.trim();if(!dadosApp.usuarios[usuarioAtual]) dadosApp.usuarios[usuarioAtual]={saldo:0,historico:[]};salvar();atualizar();}}
-function mudarAba(a){['pagar','recargar','receber'].forEach(x=>{document.getElementById('conteudo-'+x).classList.add('hidden');document.getElementById('tab-'+x).className='flex-1 py-2.5 rounded-lg';});document.getElementById('conteudo-'+a).classList.remove('hidden');document.getElementById('tab-'+a).className='flex-1 py-2.5 rounded-lg bg-emerald-900 font-bold';if(a!='pagar'&&html5QrCode&&html5QrCode.isScanning) html5QrCode.stop();}
-function iniciarCamera(){document.getElementById('reader-placeholder').classList.add('hidden');html5QrCode=new Html5Qrcode('reader');html5QrCode.start({facingMode:'environment'},{fps:10,qrbox:200},t=>{try{let d=JSON.parse(t);if(d.valor){html5QrCode.stop();abrirModal(d.loja||'Mercadinho',parseFloat(d.valor));}}catch(e){}},()=>{});}
-function abrirModal(loja,valor){pendente={loja,valor};document.getElementById('modal-nome').innerText=loja;document.getElementById('modal-valor').innerText='R$ '+valor.toFixed(2);document.getElementById('modal-confirmar').classList.remove('hidden');}
-function fecharModal(){document.getElementById('modal-confirmar').classList.add('hidden');pendente=null;}
-function confirmar(){if(!pendente)return;let u=dadosApp.usuarios[usuarioAtual];if(u.saldo<pendente.valor){alert('Saldo insuficiente');fecharModal();return;}u.saldo-=pendente.valor;u.historico.unshift({tipo:'saida',desc:pendente.loja,valor:pendente.valor,data:new Date().toLocaleString()});salvar();atualizar();fecharModal();alert('Pago!');}
-function liberarCredito(){let s=document.getElementById('senha-dono').value;let v=parseFloat(document.getElementById('valor-dono').value);if(s!==SENHA_DONO){alert('Senha errada');return;}if(!v){alert('Valor?');return;}let u=dadosApp.usuarios[usuarioAtual];u.saldo+=v;u.historico.unshift({tipo:'entrada',desc:'Recarga MP',valor:v,data:new Date().toLocaleString()});salvar();atualizar();alert('Liberado R$ '+v+' para '+usuarioAtual);document.getElementById('valor-dono').value='';document.getElementById('senha-dono').value='';}
-function estornar(){let s=document.getElementById('senha-dono').value;if(s!==SENHA_DONO){alert('Senha errada');return;}if(!confirm('Zerar saldo de '+usuarioAtual+'?'))return;let u=dadosApp.usuarios[usuarioAtual];u.saldo=0;u.historico=[];salvar();atualizar();alert('Zerado!');}
-function gerarQR(){let v=parseFloat(document.getElementById('valor-cobranca').value);if(!v)return alert('Valor?');let desc=document.getElementById('desc-cobranca').value||'Compra';let payload=JSON.stringify({loja:'Mercadinho Canopus',desc:desc,valor:v});let c=document.getElementById('qr-code');c.innerHTML='';new QRCode(c,{text:payload,width:180,height:180});document.getElementById('qr-titulo').innerText='R$ '+v+' - '+desc;document.getElementById('box-qr').classList.remove('hidden');}
-</script></body></html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crédito Canopus - Seguro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>body{background:#061f12;color:#f0fdf4;font-family:sans-serif}</style>
+</head>
+<body class="min-h-screen pb-24">
+  <header class="bg-emerald-950 border-b border-emerald-500/30 p-4 sticky top-0 z-40">
+    <div class="max-w-md mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-2.5">
+        <div class="bg-gradient-to-tr from-emerald-600 to-green-500 p-2 rounded-xl text-white">
+          <i class="fa-solid fa-leaf"></i>
+        </div>
+        <div>
+          <h1 class="font-bold">Crédito Canopus 🌿</h1>
+          <p class="text-xs text-emerald-400">Mercadinho Digital</p>
+        </div>
+      </div>
+      <button onclick="trocarUsuario()" class="text-xs bg-emerald-900 border border-emerald-700 px-3 py-2 rounded-xl text-emerald-200">
+        <i class="fa-solid fa-user"></i> <span id="nome-usuario-atual">Mirene</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-md mx-auto p-4 space-y-5">
+    <div class="bg-emerald-900 border border-emerald-500/30 rounded-2xl p-6 shadow-2xl">
+      <p class="text-emerald-300 text-xs font-bold uppercase">Saldo Disponível</p>
+      <div class="flex items-baseline space-x-1 mt-1">
+        <span class="text-emerald-400 text-xl font-bold">R$</span>
+        <span id="saldo-display" class="text-4xl font-extrabold">0,00</span>
+      </div>
+      <div class="mt-4 pt-4 border-t border-emerald-800 flex justify-between text-xs">
+        <span>Titular: <strong id="titular-nome">Mirene</strong></span>
+        <span class="text-emerald-400"><i class="fa-solid fa-circle-check"></i> Ativa</span>
+      </div>
+    </div>
+
+    <div class="flex bg-emerald-950 p-1 rounded-xl border border-emerald-800 text-sm">
+      <button id="tab-pagar" onclick="mudarAba('pagar')" class="flex-1 py-2.5 rounded-lg bg-emerald-900 text-emerald-200 font-bold">Pagar</button>
+      <button id="tab-recargar" onclick="mudarAba('recargar')" class="flex-1 py-2.5 rounded-lg text-emerald-400">Crédito</button>
+      <button id="tab-receber" onclick="mudarAba('receber')" class="flex-1 py-2.5 rounded-lg text-emerald-400">Cobrar</button>
+    </div>
+
+    <div id="conteudo-pagar" class="space-y-4">
+      <div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5 text-center">
+        <h2 class="font-semibold mb-1">Escanear QR do Mercadinho</h2>
+        <p class="text-xs text-emerald-400 mb-4">Aponte a câmera</p>
+        <div class="rounded-xl overflow-hidden bg-black border border-emerald-800 min-h-[220px] flex items-center justify-center">
+          <div id="reader" class="w-full"></div>
+          <div id="reader-placeholder" class="p-6"><i class="fa-solid fa-qrcode text-4xl text-emerald-500/50"></i></div>
+        </div>
+        <button onclick="iniciarCamera()" class="w-full mt-4 bg-emerald-500 text-emerald-950 font-bold py-3 rounded-xl">Ativar Câmera</button>
+      </div>
+    </div>
+
+    <div id="conteudo-recargar" class="hidden space-y-4">
+      <div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5 space-y-4 text-center">
+        <h2 class="font-bold">Colocar Crédito - Mercado Pago</h2>
+        <p class="text-xs text-emerald-400">Pague com segurança pelo link oficial:</p>
+        
+        <a href="https://link.mercadopago.com.br/dolarcanopus" target="_blank" class="block w-full bg-blue-500 hover:bg-blue-400 text-white font-black py-4 rounded-xl text-lg shadow-lg">
+          <i class="fa-solid fa-credit-card mr-2"></i>PAGAR NO MERCADO PAGO
+        </a>
+
+        <div class="bg-slate-950 border border-amber-500/30 p-4 rounded-xl text-left space-y-2 mt-2">
+          <p class="text-xs text-amber-200 font-bold"><i class="fa-solid fa-lock mr-1"></i> ÁREA DO DONO - Liberar Saldo</p>
+          <p class="text-[11px] text-slate-400">1. Confirme no seu app do Mercado Pago que o pagamento caiu.<br>2. Digite a senha e o valor para liberar para o cliente:</p>
+          <input type="password" id="senha-dono" placeholder="Senha do dono (canopus123)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center text-sm">
+          <input type="number" id="valor-dono" placeholder="Valor que caiu ex: 20.00" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center text-sm">
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <button onclick="liberarCredito()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-xl text-sm">✅ Liberar</button>
+            <button onclick="estornar()" class="bg-rose-900/80 hover:bg-rose-900 text-rose-200 font-bold py-3 rounded-xl text-sm">🗑️ Zerar Saldo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="conteudo-receber" class="hidden space-y-4">
+      <div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5 space-y-3">
+        <h2 class="font-semibold text-white">Cobrar no Mercadinho</h2>
+        <input type="number" id="valor-cobrativo" placeholder="Valor (R$ 5.00)" class="w-full bg-emerald-900 border border-emerald-800 rounded-xl p-3 text-white">
+        <input type="text" id="desc-cobrativo" placeholder="Descrição (Ex: Lanche)" class="w-full bg-emerald-900 border border-emerald-800 rounded-xl p-3 text-white">
+        <button onclick="gerarQrCodeCobranca()" class="w-full bg-emerald-500 text-emerald-950 font-bold py-3 rounded-xl">Gerar QR Code</button>
+        <div id="box-qr-cobranca" class="hidden pt-4 border-t border-emerald-800 text-center space-y-2">
+          <p class="text-sm font-semibold text-white" id="titulo-cobranca">Mercadinho Canopus</p>
+          <div id="canvas-qr-cobranca" class="flex justify-center p-3 bg-white rounded-xl inline-block mx-auto"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-emerald-950/40 border border-emerald-900 rounded-2xl p-5">
+      <h3 class="text-sm font-semibold text-white mb-3">Histórico de Uso</h3>
+      <div id="lista-historico" class="space-y-2 text-xs">
+        <p class="text-emerald-600 text-center py-2">Nenhuma movimentação registrada.</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="modal-confirmar" class="fixed inset-0 bg-slate-950/80 hidden flex items-center justify-center p-4 z-50">
+    <div class="bg-emerald-950 border border-emerald-500 rounded-2xl max-w-sm w-full p-6 text-center space-y-4">
+      <h3 class="font-bold text-white text-lg" id="modal-loja-nome">Mercadinho Canopus</h3>
+      <p class="text-2xl font-black text-emerald-400" id="modal-loja-valor">R$ 0,00</p>
+      <div class="flex space-x-2">
+        <button onclick="fecharModal()" class="flex-1 bg-emerald-900 text-emerald-300 py-2.5 rounded-xl text-xs">Cancelar</button>
+        <button onclick="confirmarDebito()" class="flex-1 bg-emerald-500 text-emerald-950 py-2.5 rounded-xl text-xs font-bold">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let usuarioAtual = localStorage.getItem('credito_canopus_usuario_atual') || "Mirene";
+    let dadosApp = JSON.parse(localStorage.getItem('credito_canopus_db')) || { usuarios: {} };
+    let html5QrCode = null, pendentePagamento = null;
+
+    window.onload = () => {
+      if(!dadosApp.usuarios[usuarioAtual]) {
+        dadosApp.usuarios[usuarioAtual] = { saldo: 0, historico: [] };
+        salvardb();
+      }
+      atualizarTela();
+    };
+
+    function salvardb() { localStorage.setItem('credito_canopus_db', JSON.stringify(dadosApp)); }
+
+    function atualizarTela() {
+      if(!dadosApp.usuarios[usuarioAtual]) dadosApp.usuarios[usuarioAtual] = { saldo: 0, historico: [] };
+      const user = dadosApp.usuarios[usuarioAtual];
+      document.getElementById('saldo-display').innerText = user.saldo.toFixed(2).replace('.', ',');
+      document.getElementById('titular-nome').innerText = usuarioAtual;
+      document.getElementById('nome-usuario-atual').innerText = usuarioAtual;
+      const lista = document.getElementById('lista-historico');
+      if (user.historico.length === 0) {
+        lista.innerHTML = `<p class="text-emerald-600 text-center py-2">Nenhuma movimentação.</p>`;
+      } else {
+        lista.innerHTML = user.historico.map(i => `<div class="flex justify-between bg-emerald-900/40 p-2.5 rounded-xl border border-emerald-800"><span>${i.desc}</span><span class="${i.tipo === 'entrada' ? 'text-emerald-400' : 'text-rose-400'}">${i.tipo === 'entrada' ? '+' : '-'} R$ ${i.valor.toFixed(2).replace('.', ',')}</span></div>`).join('');
+      }
+    }
+
+    function trocarUsuario() {
+      const nome = prompt("Digite o seu nome para entrar na sua carteira:", usuarioAtual);
+      if(nome && nome.trim() !== "") { 
+        usuarioAtual = nome.trim(); 
+        localStorage.setItem('credito_canopus_usuario_atual', usuarioAtual);
+        if(!dadosApp.usuarios[usuarioAtual]) {
+          dadosApp.usuarios[usuarioAtual] = { saldo: 0, historico: [] };
+          salvardb();
+        }
+        atualizarTela(); 
+      }
+    }
+
+    function mudarAba(aba) {
+      ['pagar', 'recargar', 'receber'].forEach(a => {
+        document.getElementById(`conteudo-${a}`).classList.add('hidden');
+        document.getElementById(`tab-${a}`).className = "flex-1 py-2.5 rounded-lg text-emerald-400";
+      });
+      document.getElementById(`conteudo-${aba}`).classList.remove('hidden');
+      document.getElementById(`tab-${aba}`).className = "flex-1 py-2.5 rounded-lg bg-emerald-900 text-emerald-200 font-bold";
+      if(aba !== 'pagar' && html5QrCode && html5QrCode.isScanning) html5QrCode.stop();
+    }
+
+    function iniciarCamera() {
+      document.getElementById('reader-placeholder').classList.add('hidden');
+      html5QrCode = new Html5Qrcode("reader");
+      html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 200 }, (text) => {
+        try { const d = JSON.parse(text); if(d.loja && d.valor) { html5QrCode.stop(); abrirModalConfirmacao(d.loja, d.desc || 'Compra', parseFloat(d.valor)); } } catch(e) {}
+      }, ()=>{});
+    }
+
+    function abrirModalConfirmacao(loja, desc, valor) {
+      pendentePagamento = { loja, desc, valor };
+      document.getElementById('modal-loja-nome').innerText = loja;
+      document.getElementById('modal-loja-valor').innerText = `R$ ${valor.toFixed(2).replace('.', ',')}`;
+      document.getElementById('modal-confirmar').classList.remove('hidden');
+    }
+
+    function fecharModal() { document.getElementById('modal-confirmar').classList.add('hidden'); pendentePagamento = null; }
+
+    function confirmarDebito() {
+      if(!pendentePagamento) return;
+      const user = dadosApp.usuarios[usuarioAtual];
+      if(user.saldo < pendentePagamento.valor) { alert("Saldo insuficiente!"); fecharModal(); return; }
+      user.saldo -= pendentePagamento.valor;
+      user.historico.unshift({ tipo: 'saida', desc: pendentePagamento.loja, valor: pendentePagamento.valor, data: new Date().toLocaleDateString('pt-BR') });
+      salvardb(); atualizarTela(); fecharModal(); alert("Pagamento realizado com sucesso!");
+    }
+
+    function liberarCredito() {
+      const senha = document.getElementById('senha-dono').value;
+      const valor = parseFloat(document.getElementById('valor-dono').value);
+
+      if(senha !== "canopus123") {
+        alert("Senha incorreta!");
+        return;
+      }
+      if(!valor || valor <= 0) {
+        alert("Digite um valor válido.");
+        return;
+      }
+
+      const user = dadosApp.usuarios[usuarioAtual];
+      user.saldo += valor;
+      user.historico.unshift({ tipo: 'entrada', desc: 'Recarga Mercado Pago', valor: valor, data: new Date().toLocaleDateString('pt-BR') });
+      salvardb();
+      atualizarTela();
+
+      document.getElementById('senha-dono').value = "";
+      document.getElementById('valor-dono').value = "";
+      alert(`Sucesso! R$ ${valor.toFixed(2)} liberados para ${usuarioAtual}.`);
+    }
+
+    function estornar() {
+      const senha = document.getElementById('senha-dono').value;
+      if(senha !== "canopus123") {
+        alert("Senha incorreta!");
+        return;
+      }
+      const user = dadosApp.usuarios[usuarioAtual];
+      user.saldo = 0;
+      user.historico.unshift({ tipo: 'saida', desc: 'Zerar / Estorno', valor: user.saldo, data: new Date().toLocaleDateString('pt-BR') });
+      salvardb();
+      atualizarTela();
+      document.getElementById('senha-dono').value = "";
+      alert("Saldo zerado com sucesso.");
+    }
+
+    function gerarQrCodeCobranca() {
+      const valor = parseFloat(document.getElementById('valor-cobrativo').value);
+      if(!valor || valor <= 0) { alert("Informe o valor."); return; }
+      const payload = JSON.stringify({ loja: "Mercadinho Canopus", desc: document.getElementById('desc-cobrativo').value || 'Compra', valor: valor });
+      const container = document.getElementById('canvas-qr-cobranca');
+      container.innerHTML = "";
+      new QRCode(container, { text: payload, width: 160, height: 160 });
+      document.getElementById('titulo-cobranca').innerText = `Mercadinho Canopus - R$ ${valor.toFixed(2)}`;
+      document.getElementById('box-qr-cobranca').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
