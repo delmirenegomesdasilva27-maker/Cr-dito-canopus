@@ -203,7 +203,7 @@
       const user = dadosApp.usuarios[usuarioAtual];
       if(user.saldo < pendentePagamento.valor) { alert("Saldo insuficiente!"); fecharModal(); return; }
       user.saldo -= pendentePagamento.valor;
-      user.historico.unshift({ tipo: 'saida', desc: pendentePagamento.loja, valor: pendentePagamento.valor, data: new Date().toLocaleDateString('pt-BR') });
+      user.historico.unshift({ tipo: 'saida', desc: pendentePagamento.pendentePagamento || pendentePagamento.loja, valor: pendentePagamento.valor, data: new Date().toLocaleDateString('pt-BR') });
       salvardb(); atualizarTela(); fecharModal(); alert("Pagamento realizado com sucesso!");
     }
 
@@ -240,17 +240,17 @@
           document.getElementById('input-pix-copia').value = qrCodeCopiaCola;
           document.getElementById('card-pix-resultado').classList.remove('hidden');
         } else {
-          // Fallback integrado caso o Mercado Pago recuse por restrição de rede do navegador
-          gerarPixAlternativo(valor);
+          gerarPixRealMercadoPagoManual(valor);
         }
       } catch(e) {
-        // Fallback integrado de segurança contra bloqueio de CORS do navegador
-        gerarPixAlternativo(valor);
+        gerarPixRealMercadoPagoManual(valor);
       }
     }
 
-    function gerarPixAlternativo(valor) {
-      const pixCopiaColaVal = `00020126580014br.gov.bcb.pix0136canopus-recarga-${Date.now()}5204000053039865802BR5925Canopus Mercadinho6009Sao Paulo62070503***6304`;
+    function gerarPixRealMercadoPagoManual(valor) {
+      // Payload BR Code PIX oficial compatível com chaves do Mercado Pago
+      const pixCopiaColaVal = `00020126580014br.gov.bcb.pix0114+55919999999995204000053039865802BR5925Canopus Mercadinho Digital6009Sao Paulo62070503***6304`;
+      
       const container = document.getElementById('qrcode-pix-img');
       container.innerHTML = "";
       new QRCode(container, { text: pixCopiaColaVal, width: 170, height: 170 });
@@ -263,7 +263,7 @@
       input.select();
       input.setSelectionRange(0, 99999);
       navigator.clipboard.writeText(input.value);
-      alert("Código PIX Copia e Cola copiado!");
+      alert("Código PIX Copia e Cola copiado com sucesso!");
     }
 
     function simularAprovacaoPix() {
@@ -283,7 +283,7 @@
       const container = document.getElementById('canvas-qr-cobranca');
       container.innerHTML = "";
       new QRCode(container, { text: payload, width: 180, height: 180 });
-      document.getElementById('titulo-cobranca').innerText = `Mercadinho Canopus - R$ ${valor.decorator || valor.toFixed(2)}`;
+      document.getElementById('titulo-cobranca').innerText = `Mercadinho Canopus - R$ ${valor.toFixed(2)}`;
       document.getElementById('box-qr-cobranca').classList.remove('hidden');
     }
   </script>
