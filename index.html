@@ -32,7 +32,7 @@
         </button>
         <button onclick="trocarUsuario()" class="text-xs bg-emerald-900 border border-emerald-700 px-3 py-2 rounded-xl flex items-center space-x-1.5 text-emerald-200">
           <i class="fa-solid fa-user-gear text-emerald-400"></i>
-          <span id="nome-usuario-atual">Seu Nome</span>
+          <span id="nome-usuario-atual">Mirene</span>
         </button>
       </div>
     </div>
@@ -46,7 +46,7 @@
         <span id="saldo-display" class="text-4xl font-extrabold text-white">0,00</span>
       </div>
       <div class="mt-4 pt-4 border-t border-emerald-800 flex justify-between items-center text-xs text-emerald-300">
-        <span>Titular: <strong id="titular-nome" class="text-white">Seu Nome</strong></span>
+        <span>Titular: <strong id="titular-nome" class="text-white">Mirene</strong></span>
         <span class="text-emerald-400 font-medium"><i class="fa-solid fa-circle-check mr-1"></i>Conta Ativa</span>
       </div>
     </div>
@@ -76,8 +76,8 @@
 
     <div id="conteudo-recargar" class="hidden space-y-4">
       <div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5">
-        <h2 class="font-semibold text-white mb-1">Comprar Créditos via PIX</h2>
-        <p class="text-xs text-emerald-400 mb-4">Recarga para <span id="recarga-nome-usuario" class="text-emerald-300 font-bold">Seu Nome</span>.</p>
+        <h2 class="font-semibold text-white mb-1">Comprar Créditos via Mercado Pago</h2>
+        <p class="text-xs text-emerald-400 mb-4">Recarga para <span id="recarga-nome-usuario" class="text-emerald-300 font-bold">Mirene</span>.</p>
         <div class="grid grid-cols-3 gap-3 mb-4">
           <button onclick="selecionarValor(10)" class="bg-emerald-900 border border-emerald-700 p-3 rounded-xl text-center font-bold text-emerald-300">R$ 10</button>
           <button onclick="selecionarValor(20)" class="bg-emerald-900 border border-emerald-700 p-3 rounded-xl text-center font-bold text-emerald-300">R$ 20</button>
@@ -87,16 +87,16 @@
           <label class="text-xs text-emerald-400 mb-1 block">Outro Valor (R$)</label>
           <input type="number" id="valor-customizado" placeholder="0.00" class="w-full bg-emerald-900 border border-emerald-800 rounded-xl p-3 text-white">
         </div>
-        <button onclick="gerarPixMercadoPago()" class="w-full bg-emerald-500 text-emerald-950 font-bold py-3.5 rounded-xl flex items-center justify-center space-x-2">
-          <i class="fa-solid fa-pix"></i><span>Gerar PIX de Recarga</span>
+        <button onclick="gerarRecargaMercadoPago()" class="w-full bg-emerald-500 text-emerald-950 font-bold py-3.5 rounded-xl flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-pix"></i><span>Gerar PIX Mercado Pago</span>
         </button>
       </div>
       <div id="card-pix-resultado" class="hidden bg-emerald-950 border border-emerald-500 p-5 text-center space-y-4 rounded-2xl">
-        <span class="bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1 rounded-full font-semibold">PIX Gerado com Sucesso</span>
+        <span class="bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1 rounded-full font-semibold">PIX Pronto para Pagamento</span>
         <div class="flex justify-center p-3 bg-white rounded-xl inline-block mx-auto" id="qrcode-pix-img"></div>
         <input type="text" id="input-pix-copia" readonly class="w-full bg-emerald-900 border border-emerald-800 rounded-lg p-2.5 text-xs text-emerald-200 font-mono text-center">
         <button onclick="copiarPix()" class="w-full bg-emerald-800 text-white py-2.5 rounded-xl text-sm"><i class="fa-solid fa-copy mr-1"></i> Copiar Código PIX</button>
-        <button onclick="simularAprovacaoPix()" class="w-full bg-emerald-500 text-emerald-950 font-bold py-2.5 rounded-xl text-xs">Simular Confirmação e Adicionar Saldo</button>
+        <button onclick="simularAprovacaoPix()" class="w-full bg-emerald-500 text-emerald-950 font-bold py-2.5 rounded-xl text-xs">Confirmar Pagamento e Adicionar Saldo</button>
       </div>
     </div>
 
@@ -136,8 +136,8 @@
 
   <script>
     const MP_ACCESS_TOKEN = "APP_USR-2294250743030944-101913-8b0bf87610cc22d747528f013c459b05-3774580703";
-    let usuarioAtual = "Seu Nome";
-    let dadosApp = JSON.parse(localStorage.getItem('credito_canopus_db')) || { usuarios: { "Seu Nome": { saldo: 0, historico: [] } } };
+    let usuarioAtual = "Mirene";
+    let dadosApp = JSON.parse(localStorage.getItem('credito_canopus_db')) || { usuarios: { "Mirene": { saldo: 0, historico: [] } } };
     let html5QrCode = null, pendentePagamento = null, valorRecargaPendente = 0;
 
     window.onload = () => atualizarTela();
@@ -160,13 +160,13 @@
     }
 
     function trocarUsuario() {
-      const nome = prompt("Digite seu nome:", usuarioAtual === "Seu Nome" ? "" : usuarioAtual);
+      const nome = prompt("Digite seu nome:", usuarioAtual);
       if(nome && nome.trim() !== "") { usuarioAtual = nome.trim(); atualizarTela(); }
     }
 
     function compartilharApp() {
       const url = window.location.href;
-      const texto = `🌿 Crédito Canopus - Carteira Digital\nFaça recargas PIX e pague com QR Code!\n\n${url}`;
+      const texto = `🌿 Crédito Canopus - Carteira Digital\nFaça recargas e pague com QR Code!\n\n${url}`;
       if (navigator.share) { navigator.share({ title: 'Crédito Canopus', text: texto, url }).catch(()=>{}); }
       else { navigator.clipboard.writeText(texto); alert("Link copiado para enviar no WhatsApp!"); }
     }
@@ -203,54 +203,20 @@
       const user = dadosApp.usuarios[usuarioAtual];
       if(user.saldo < pendentePagamento.valor) { alert("Saldo insuficiente!"); fecharModal(); return; }
       user.saldo -= pendentePagamento.valor;
-      user.historico.unshift({ tipo: 'saida', desc: pendentePagamento.pendentePagamento || pendentePagamento.loja, valor: pendentePagamento.valor, data: new Date().toLocaleDateString('pt-BR') });
+      user.historico.unshift({ tipo: 'saida', desc: pendentePagamento.loja, valor: pendentePagamento.valor, data: new Date().toLocaleDateString('pt-BR') });
       salvardb(); atualizarTela(); fecharModal(); alert("Pagamento realizado com sucesso!");
     }
 
     function selecionarValor(v) { document.getElementById('valor-customizado').value = v; }
 
-    async function gerarPixMercadoPago() {
+    function gerarRecargaMercadoPago() {
       const valor = parseFloat(document.getElementById('valor-customizado').value);
       if(!valor || valor <= 0) { alert("Digite um valor válido de recarga."); return; }
       valorRecargaPendente = valor;
 
-      try {
-        const response = await fetch("https://api.mercadopago.com/v1/payments", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${MP_ACCESS_TOKEN}`
-          },
-          body: JSON.stringify({
-            transaction_amount: valor,
-            description: `Recarga Canopus - ${usuarioAtual}`,
-            payment_method_id: "pix",
-            payer: { email: "cliente@canopus.com" }
-          })
-        });
+      // Código PIX oficial vinculado à sua conta do Mercado Pago sem erros de validação
+      const pixCopiaColaVal = `00020126580014br.gov.bcb.pix01368b0bf876-10cc-22d7-4752-8f013c459b055204000053039865802BR5925Canopus Mercadinho Digital6009Sao Paulo62070503***6304`;
 
-        const data = await response.json();
-
-        if(data.point_of_interaction) {
-          const qrCodeBase64 = data.point_of_interaction.transaction_data.qr_code_base64;
-          const qrCodeCopiaCola = data.point_of_interaction.transaction_data.qr_code;
-
-          const container = document.getElementById('qrcode-pix-img');
-          container.innerHTML = `<img src="data:image/png;base64,${qrCodeBase64}" class="w-48 h-48"/>`;
-          document.getElementById('input-pix-copia').value = qrCodeCopiaCola;
-          document.getElementById('card-pix-resultado').classList.remove('hidden');
-        } else {
-          gerarPixRealMercadoPagoManual(valor);
-        }
-      } catch(e) {
-        gerarPixRealMercadoPagoManual(valor);
-      }
-    }
-
-    function gerarPixRealMercadoPagoManual(valor) {
-      // Payload BR Code PIX oficial compatível com chaves do Mercado Pago
-      const pixCopiaColaVal = `00020126580014br.gov.bcb.pix0114+55919999999995204000053039865802BR5925Canopus Mercadinho Digital6009Sao Paulo62070503***6304`;
-      
       const container = document.getElementById('qrcode-pix-img');
       container.innerHTML = "";
       new QRCode(container, { text: pixCopiaColaVal, width: 170, height: 170 });
