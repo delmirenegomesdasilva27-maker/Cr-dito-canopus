@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crédito Canopus - Carteira Digital</title>
+  <!-- Tailwind CSS para design moderno e responsivo -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome para ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Bibliotecas para QR Code (Leitor e Gerador) -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
+    .neon-border { box-shadow: 0 0 15px rgba(6, 182, 212, 0.4); }
+  </style>
+</head>
+<body class="min-h-screen pb-20">
+
+  <!-- Cabeçalho Principal -->
+  <header class="bg-slate-900 border-b border-cyan-500/30 p-4 sticky top-0 z-40 neon-border">
+    <div class="max-w-md mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="bg-gradient-to-tr from-cyan-500 to-blue-600 p-2 rounded-xl">
+          <i class="fa-solid fa-bolt text-xl text-white"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg text-white leading-tight">Crédito Canopus</h1>
+          <p class="text-xs text-cyan-400">Carteira Digital & Pagamentos</p>
+        </div>
+      </div>
+      <button onclick="trocarUsuario()" class="text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition">
+        <i class="fa-solid fa-users text-cyan-400"></i>
+        <span id="nome-usuario-atual">Maria</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="max-w-md mx-auto p-4 space-y-6">
+
+    <!-- Card de Saldo -->
+    <div class="bg-gradient-to-br from-slate-800 to-slate-900 border border-cyan-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+      <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-cyan-500/10 rounded-full blur-xl"></div>
+      <p class="text-slate-400 text-sm mb-1">Saldo Disponível</p>
+      <div class="flex items-baseline space-x-1">
+        <span class="text-cyan-400 text-xl font-bold">R$</span>
+        <span id="saldo-display" class="text-4xl font-extrabold text-white tracking-tight">0,00</span>
+      </div>
+      <div class="mt-4 pt-4 border-t border-slate-700/50 flex justify-between items-center text-xs text-slate-400">
+        <span>Titular: <strong id="titular-nome" class="text-white">Maria</strong></span>
+        <span class="text-cyan-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Conta Ativa</span>
+      </div>
+    </div>
+
+    <!-- Navegação por Abas -->
+    <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800 text-sm">
+      <button id="tab-pagar" onclick="mudarAba('pagar')" class="flex-1 py-2.5 rounded-lg font-medium text-cyan-400 bg-slate-800 shadow transition">Pagar (Câmera)</button>
+      <button id="tab-recargar" onclick="mudarAba('recargar')" class="flex-1 py-2.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Colocar Crédito</button>
+      <button id="tab-receber" onclick="mudarAba('receber')" class="flex-1 py-2.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Receber (Cobrar)</button>
+    </div>
+
+    <!-- ABA 1: PAGAR COM CÂMERA -->
+    <div id="conteudo-pagar" class="space-y-4">
+      <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5 text-center">
+        <h2 class="font-semibold text-white mb-2">Escanear QR Code do Mercadinho</h2>
+        <p class="text-xs text-slate-400 mb-4">Aponte a câmera para o QR Code no balcão para realizar o pagamento.</p>
+        
+        <div id="reader-container" class="relative rounded-xl overflow-hidden bg-slate-950 border border-slate-700 min-h-[220px] flex items-center justify-center">
+          <div id="reader" class="w-full"></div>
+          <div id="reader-placeholder" class="text-center p-6 space-y-3">
+            <i class="fa-solid fa-qrcode text-4xl text-cyan-400/50"></i>
+            <p class="text-xs text-slate-500">Clique abaixo para ativar a câmera do celular.</p>
+          </div>
+        </div>
+
+        <button id="btn-camera" onclick="iniciarCamera()" class="w-full mt-4 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-xl transition flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-camera"></i>
+          <span>Ativar Câmera</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ABA 2: COLOCAR CRÉDITO (RECARGA PIX) -->
+    <div id="conteudo-recargar" class="hidden space-y-4">
+      <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5">
+        <h2 class="font-semibold text-white mb-1">Comprar Créditos via PIX</h2>
+        <p class="text-xs text-slate-400 mb-4">Selecione o valor para recarregar a carteira de <span id="recarga-nome-usuario" class="text-cyan-400 font-bold">Maria</span>.</p>
+
+        <!-- Botões de Valores Rápidos -->
+        <div class="grid grid-cols-3 gap-3 mb-4">
+          <button onclick="selecionarValor(10)" class="btn-valor bg-slate-900 border border-slate-700 hover:border-cyan-500 p-3 rounded-xl text-center font-bold text-cyan-400">R$ 10</button>
+          <button onclick="selecionarValor(20)" class="btn-valor bg-slate-900 border border-slate-700 hover:border-cyan-500 p-3 rounded-xl text-center font-bold text-cyan-400">R$ 20</button>
+          <button onclick="selecionarValor(50)" class="btn-valor bg-slate-900 border border-slate-700 hover:border-cyan-500 p-3 rounded-xl text-center font-bold text-cyan-400">R$ 50</button>
+        </div>
+
+        <div class="mb-4">
+          <label class="text-xs text-slate-400 mb-1 block">Outro Valor (R$)</label>
+          <input type="number" id="valor-customizado" placeholder="0.00" min="1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-cyan-500">
+        </div>
+
+        <button onclick="gerarPixMercadoPago()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 rounded-xl transition flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-pix"></i>
+          <span>Gerar PIX de Recarga</span>
+        </button>
+      </div>
+
+      <!-- Card do PIX Gerado -->
+      <div id="card-pix-resultado" class="hidden bg-slate-800 border border-emerald-500/40 rounded-2xl p-5 text-center space-y-4">
+        <span class="inline-block bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1 rounded-full font-semibold">PIX Gerado com Sucesso</span>
+        <div class="flex justify-center p-2 bg-white rounded-xl inline-block mx-auto" id="qrcode-pix-img"></div>
+        
+        <div>
+          <p class="text-xs text-slate-400 mb-1">Código PIX Copia e Cola:</p>
+          <input type="text" id="input-pix-copia" readonly class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-300 font-mono text-center">
+        </div>
+
+        <button onclick="copiarPix()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium py-2.5 rounded-xl text-sm transition">
+          <i class="fa-solid fa-copy mr-1"></i> Copiar Código PIX
+        </button>
+
+        <button onclick="simularAprovacaoPix()" class="w-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 font-semibold py-2 rounded-xl text-xs">
+          Simular Confirmação de Pagamento
+        </button>
+      </div>
+    </div>
+
+    <!-- ABA 3: RECEBER (GERAR QR CODE DE COBRANÇA) -->
+    <div id="conteudo-receber" class="hidden space-y-4">
+      <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5">
+        <h2 class="font-semibold text-white mb-1">Cobrar no Mercadinho</h2>
+        <p class="text-xs text-slate-400 mb-4">Gere um QR Code para o cliente escanear e pagar.</p>
+
+        <div class="space-y-3">
+          <div>
+            <label class="text-xs text-slate-400 mb-1 block">Valor do Lanche / Compra (R$)</label>
+            <input type="number" id="valor-cobrativo" placeholder="5.00" step="0.50" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-cyan-500">
+          </div>
+          <div>
+            <label class="text-xs text-slate-400 mb-1 block">Descrição do Produto</label>
+            <input type="text" id="desc-cobrativo" placeholder="Ex: Lanche + Suco" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-cyan-500">
+          </div>
+          <button onclick="gerarQrCodeCobranca()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-xl transition">
+            Gerar QR Code de Cobrança
+          </button>
+        </div>
+
+        <div id="box-qr-cobranca" class="hidden mt-6 pt-6 border-t border-slate-700 text-center space-y-3">
+          <p class="text-sm font-semibold text-white" id="titulo-cobranca">Mercadinho Canopus</p>
+          <div id="canvas-qr-cobranca" class="flex justify-center p-3 bg-white rounded-2xl inline-block mx-auto"></div>
+          <p class="text-xs text-slate-400">Peça para o cliente abrir o app e escanear este código.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Extrato de Transações -->
+    <div class="bg-slate-800/50 border border-slate-800 rounded-2xl p-5">
+      <h3 class="text-sm font-semibold text-white mb-3 flex items-center justify-between">
+        <span>Histórico de Uso</span>
+        <i class="fa-solid fa-clock-rotate-left text-slate-500"></i>
+      </h3>
+      <div id="lista-historico" class="space-y-2 text-xs">
+        <p class="text-slate-500 text-center py-2">Nenhuma movimentação registrada.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Modal de Confirmação de Pagamento -->
+  <div id="modal-confirmar" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-cyan-500/40 rounded-2xl max-w-sm w-full p-6 text-center space-y-4">
+      <div class="w-12 h-12 bg-cyan-500/10 text-cyan-400 rounded-full flex items-center justify-center mx-auto text-xl">
+        <i class="fa-solid fa-store"></i>
+      </div>
+      <div>
+        <h3 class="font-bold text-white text-lg" id="modal-loja-nome">Mercadinho Canopus</h3>
+        <p class="text-xs text-slate-400" id="modal-loja-desc">Compra de Lanche</p>
+      </div>
+      <div class="bg-slate-800 p-3 rounded-xl">
+        <p class="text-xs text-slate-400">Valor a ser debitado</p>
+        <p class="text-2xl font-black text-cyan-400" id="modal-loja-valor">R$ 0,00</p>
+      </div>
+      <div class="flex space-x-2">
+        <button onclick="fecharModal()" class="flex-1 bg-slate-800 text-slate-300 py-2.5 rounded-xl text-xs font-semibold">Cancelar</button>
+        <button onclick="confirmarDebito()" class="flex-1 bg-cyan-500 text-slate-950 py-2.5 rounded-xl text-xs font-bold">Confirmar Pagamento</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Access Token oficial do Mercado Pago do projeto Crédito Canopus
+    const MP_ACCESS_TOKEN = "APP_USR-2294250743030944-101913-8b0bf87610cc22d747528f013c459b05-3774580703";
+
+    // Dados Globais e Perfis
+    let usuarioAtual = "Maria";
+    let dadosApp = JSON.parse(localStorage.getItem('credito_canopus_db')) || {
+      usuarios: {
+        "Maria": { saldo: 25.00, historico: [] },
+        "João": { saldo: 15.00, historico: [] }
+      }
+    };
+
+    let html5QrCode = null;
+    let pendentePagamento = null;
+    let valorRecargaPendente = 0;
+
+    // Inicialização
+    window.onload = () => {
+      atualizarTela();
+    };
+
+    function salvardb() {
+      localStorage.setItem('credito_canopus_db', JSON.stringify(dadosApp));
+    }
+
+    function atualizarTela() {
+      if(!dadosApp.usuarios[usuarioAtual]) {
+        dadosApp.usuarios[usuarioAtual] = { saldo: 0, historico: [] };
+      }
+      const user = dadosApp.usuarios[usuarioAtual];
+      document.getElementById('saldo-display').innerText = user.saldo.toFixed(2).replace('.', ',');
+      document.getElementById('titular-nome').innerText = usuarioAtual;
+      document.getElementById('nome-usuario-atual').innerText = usuarioAtual;
+      document.getElementById('recarga-nome-usuario').innerText = usuarioAtual;
+
+      // Renderizar Histórico
+      const lista = document.getElementById('lista-historico');
+      if (user.historico.length === 0) {
+        lista.innerHTML = `<p class="text-slate-500 text-center py-2">Nenhuma movimentação registrada.</p>`;
+      } else {
+        lista.innerHTML = user.historico.map(item => `
+          <div class="flex justify-between items-center bg-slate-900/60 p-2.5 rounded-xl border border-slate-800">
+            <div>
+              <p class="font-medium text-white">${item.desc}</p>
+              <p class="text-[10px] text-slate-500">${item.data}</p>
+            </div>
+            <span class="font-bold ${item.tipo === 'entrada' ? 'text-emerald-400' : 'text-rose-400'}">
+              ${item.tipo === 'entrada' ? '+' : '-'} R$ ${item.valor.toFixed(2).replace('.', ',')}
+            </span>
+          </div>
+        `).join('');
+      }
+    }
+
+    function trocarUsuario() {
+      const novoNome = prompt("Digite o nome da pessoa / conta:", usuarioAtual);
+      if(novoNome && novoNome.trim() !== "") {
+        usuarioAtual = novoNome.trim();
+        atualizarTela();
+      }
+    }
+
+    function mudarAba(aba) {
+      ['pagar', 'recargar', 'receber'].forEach(a => {
+        document.getElementById(`conteudo-${a}`).classList.add('hidden');
+        document.getElementById(`tab-${a}`).className = "flex-1 py-2.5 rounded-lg font-medium text-slate-400 hover:text-white transition";
+      });
+
+      document.getElementById(`conteudo-${aba}`).classList.remove('hidden');
+      document.getElementById(`tab-${aba}`).className = "flex-1 py-2.5 rounded-lg font-medium text-cyan-400 bg-slate-800 shadow transition";
+
+      if(aba !== 'pagar' && html5QrCode && html5QrCode.isScanning) {
+        html5QrCode.stop();
+      }
+    }
+
+    // --- LEITOR DE QR CODE (CÂMERA) ---
+    function iniciarCamera() {
+      document.getElementById('reader-placeholder').classList.add('hidden');
+      html5QrCode = new Html5Qrcode("reader");
+
+      html5QrCode.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 200, height: 200 } },
+        (decodedText) => {
+          try {
+            const dados = JSON.parse(decodedText);
+            if(dados.loja && dados.valor) {
+              html5QrCode.stop();
+              abrirModalConfirmacao(dados.loja, dados.desc || 'Compra', parseFloat(dados.valor));
+            }
+          } catch(e) {
+            alert("QR Code inválido para o Crédito Canopus.");
+          }
+        },
+        () => {}
+      ).catch(() => alert("Não foi possível acessar a câmera do celular."));
+    }
+
+    function abrirModalConfirmacao(loja, desc, valor) {
+      pendentePagamento = { loja, desc, valor };
+      document.getElementById('modal-loja-nome').innerText = loja;
+      document.getElementById('modal-loja-desc').innerText = desc;
+      document.getElementById('modal-loja-valor').innerText = `R$ ${valor.toFixed(2).replace('.', ',')}`;
+      document.getElementById('modal-confirmar').classList.remove('hidden');
+    }
+
+    function fecharModal() {
+      document.getElementById('modal-confirmar').classList.add('hidden');
+      pendentePagamento = null;
+    }
+
+    function confirmarDebito() {
+      if(!pendentePagamento) return;
+      const user = dadosApp.usuarios[usuarioAtual];
+
+      if(user.saldo < pendentePagamento.valor) {
+        alert("Saldo insuficiente para realizar esta compra!");
+        fecharModal();
+        return;
+      }
+
+      user.saldo -= pendentePagamento.valor;
+      user.historico.unshift({
+        tipo: 'saida',
+        desc: `${pendentePagamento.loja} (${pendentePagamento.desc})`,
+        valor: pendentePagamento.valor,
+        data: new Date().toLocaleDateString('pt-BR')
+      });
+
+      salvardb();
+      atualizarTela();
+      fecharModal();
+      alert("Pagamento realizado com sucesso!");
+    }
+
+    // --- RECARGA PIX (MERCADO PAGO) ---
+    function selecionarValor(v) {
+      document.getElementById('valor-customizado').value = v;
+    }
+
+    async function gerarPixMercadoPago() {
+      const inputVal = document.getElementById('valor-customizado').value;
+      const valor = parseFloat(inputVal);
+
+      if(!valor || valor <= 0) {
+        alert("Digite um valor válido de recarga.");
+        return;
+      }
+
+      valorRecargaPendente = valor;
+
+      try {
+        const response = await fetch("https://api.mercadopago.com/v1/payments", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${MP_ACCESS_TOKEN}`
+          },
+          body: JSON.stringify({
+            transaction_amount: valor,
+            description: `Recarga Canopus - ${usuarioAtual}`,
+            payment_method_id: "pix",
+            payer: { email: "cliente@canopus.com" }
+          })
+        });
+
+        const data = await response.json();
+
+        if(data.point_of_interaction) {
+          const qrCodeBase64 = data.point_of_interaction.transaction_data.qr_code_base64;
+          const qrCodeCopiaCola = data.point_of_interaction.transaction_data.qr_code;
+
+          document.getElementById('qrcode-pix-img').innerHTML = `<img src="data:image/png;base64,${qrCodeBase64}" class="w-48 h-48"/>`;
+          document.getElementById('input-pix-copia').value = qrCodeCopiaCola;
+          document.getElementById('card-pix-resultado').classList.remove('hidden');
+        } else {
+          alert("Erro ao conectar com o Mercado Pago. Tente novamente.");
+        }
+      } catch(e) {
+        alert("Falha no servidor. Verifique a sua conexão.");
+      }
+    }
+
+    function copiarPix() {
+      const input = document.getElementById('input-pix-copia');
+      input.select();
+      document.execCommand('copy');
+      alert("Código PIX copiado!");
+    }
+
+    function simularAprovacaoPix() {
+      const user = dadosApp.usuarios[usuarioAtual];
+      user.saldo += valorRecargaPendente;
+      user.historico.unshift({
+        tipo: 'entrada',
+        desc: 'Recarga de Créditos via PIX',
+        valor: valorRecargaPendente,
+        data: new Date().toLocaleDateString('pt-BR')
+      });
+
+      salvardb();
+      atualizarTela();
+      document.getElementById('card-pix-resultado').classList.add('hidden');
+      alert(`Sucesso! R$ ${valorRecargaPendente.toFixed(2)} adicionados ao saldo de ${usuarioAtual}.`);
+    }
+
+    // --- MODO VENDEDOR (GERAR QR CODE) ---
+    function gerarQrCodeCobranca() {
+      const valor = parseFloat(document.getElementById('valor-cobrativo').value);
+      const desc = document.getElementById('desc-cobrativo').value || 'Compra Mercadinho';
+
+      if(!valor || valor <= 0) {
+        alert("Informe o valor da cobrança.");
+        return;
+      }
+
+      const payload = JSON.stringify({
+        loja: "Mercadinho Canopus",
+        desc: desc,
+        valor: valor
+      });
+
+      const container = document.getElementById('canvas-qr-cobranca');
+      container.innerHTML = "";
+      new QRCode(container, { text: payload, width: 180, height: 180 });
+
+      document.getElementById('titulo-cobranca').innerText = `Mercadinho Canopus - R$ ${valor.toFixed(2)}`;
+      document.getElementById('box-qr-cobranca').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
