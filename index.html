@@ -7,117 +7,224 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
 body{background:#011611;color:#fff}
-.topo{background:#05261e;padding:16px;display:flex;justify-content:space-between;align-items:center}
-.icon{width:48px;height:48px;background:#0db87a;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px}
-.tit{font-size:19px;font-weight:800}
-.sub{color:#5ab99a;font-size:13px}
-.btnShare{width:38px;height:38px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer}
+.topo{background:#05261e;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #0e3a2d}
+.logo{width:56px;height:56px;background:#2a9d5c;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.tit{font-size:20px;font-weight:800;cursor:pointer;user-select:none}
+.sub{color:#5ab99a;font-size:14px}
+.btnShare{width:44px;height:44px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .card{margin:14px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:16px;padding:14px;display:flex;justify-content:space-between}
-.tabs{margin:14px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:16px;padding:4px;display:flex;gap:4px}
-.tab{flex:1;padding:11px;text-align:center;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;color:#5ab99a}
+.tabs{margin:14px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:16px;padding:5px;display:flex;gap:4px}
+.tab{flex:1;padding:12px 4px;text-align:center;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;color:#5ab99a}
 .tab.ativo{background:#193d32;color:#fff}
-.tabDono{display:none;color:#facc15}
-.tabDono.mostrar{display:block}
-.aba{margin:14px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:20px;padding:18px;text-align:center;display:none}
-.aba.ativa{display:block}
-.cam{margin:14px 0;background:#010a08;border-radius:18px;height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#3a9a7f}
-.btnCam{width:100%;background:#10e0a0;color:#00261c;border:none;padding:15px;border-radius:16px;font-weight:800;font-size:16px}
-.btnMp{display:block;width:100%;background:#009ee3;color:#fff;padding:15px;border-radius:16px;font-weight:800;text-decoration:none;margin-top:12px}
+#tabDono{display:none;color:#facc15;background:#193d32}
+#tabDono.ver{display:block}
+#tabDono.ativo{color:#000;background:#facc15}
+.aba{margin:14px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:20px;padding:18px;display:none}
+.aba.on{display:block}
+.abaDono{border-color:#facc15 !important}
+input{width:100%;padding:14px;border-radius:12px;border:1px solid #1b5a47;background:#011611;color:#fff;margin-top:10px;font-size:16px}
+.btn{width:100%;padding:14px;border-radius:12px;border:none;font-weight:800;margin-top:10px;cursor:pointer;display:block;font-size:16px}
+.btnAmarelo{background:#facc15;color:#000}
+.btnVerde{background:#10e0a0;color:#00261c}
+.btnVermelho{background:#ef4444;color:#fff}
+.btnAzul{background:#009ee3;color:#fff;text-align:center;text-decoration:none}
+.pend{background:#011611;border:1px solid #facc15;border-radius:12px;padding:12px;margin-top:10px}
 </style>
 </head>
 <body>
 
 <div class="topo">
-<div style="display:flex;gap:10px;align-items:center">
-<div class="icon">🍃</div>
-<div>
-<div class="tit" onclick="clique5vezes()">Crédito Canopus 🌿</div>
-<div class="sub">Mercadinho Digital</div>
-</div>
+<div style="display:flex;gap:12px;align-items:center">
+<div class="logo">🍃</div>
+<div><div class="tit" id="tituloApp">Crédito Canopus 🌿</div><div class="sub">Mercadinho Digital</div></div>
 </div>
 <div class="btnShare" onclick="compartilhar()">↗</div>
 </div>
 
 <div class="card">
-<span style="color:#8ec9b3;font-size:14px">Titular: <b style="color:#fff">Mirene</b></span>
-<span style="color:#6ee7b7;font-size:14px">✅ Conta Ativa</span>
+<span style="color:#8ec9b3">Titular: <b style="color:#fff">Mirene</b></span>
+<span style="color:#6ee7b7">✅ Conta Ativa</span>
 </div>
 
 <div class="tabs">
-<div id="t1" class="tab ativo" onclick="mostrar(1)">1. Pagar</div>
-<div id="t2" class="tab" onclick="mostrar(2)">2. Comprar Crédito</div>
-<div id="t3" class="tab tabDono" onclick="mostrar(3)">3. ÁREA DO DONO</div>
+<div id="t1" class="tab ativo" onclick="abrir(1)">1. Pagar</div>
+<div id="t2" class="tab" onclick="abrir(2)">2. Comprar Crédito</div>
+<div id="tabDono" class="tab" onclick="abrir(3)">3. ÁREA DO DONO</div>
 </div>
 
-<div id="aba1" class="aba ativa">
+<!-- ABA 1 PAGAR -->
+<div id="a1" class="aba on" style="text-align:center">
 <b style="font-size:18px">Escanear QR Code do Mercadinho</b>
-<p style="color:#5ab99a;font-size:13px;margin-top:8px">Aponte a câmera para o QR Code no balcão para pagar.</p>
-<div class="cam"><div style="font-size:28px">⊞</div><p style="margin-top:10px;font-size:14px">Clique abaixo<br>para ativar a<br>câmera.</p></div>
-<button class="btnCam">📷 Ativar Câmera</button>
+<p style="color:#5ab99a;font-size:13px;margin-top:6px">Aponte a câmera para o QR Code no balcão</p>
+<div style="margin:12px 0;background:#010a08;border-radius:18px;height:200px;display:flex;align-items:center;justify-content:center;color:#3a9a7f">⊞ Câmera</div>
+<button class="btn btnVerde">📷 Ativar Câmera</button>
+<input id="nomePagar" placeholder="Nome do cliente">
+<input id="valorPagar" type="number" placeholder="Valor a descontar">
+<button class="btn btnVermelho" onclick="descontar()">Descontar do Saldo</button>
+<p id="msgPagar" style="color:#6ee7b7;margin-top:8px"></p>
 </div>
 
-<div id="aba2" class="aba">
+<!-- ABA 2 COMPRAR CREDITO -->
+<div id="a2" class="aba" style="text-align:center">
 <b>Comprar Crédito</b>
-<p style="color:#5ab99a;font-size:13px;margin:10px 0">Clique para pagar</p>
-<a href="https://link.mercadopago.com.br/dolarcanopus" target="_blank" class="btnMp">🛒 Pagar no Mercado Pago</a>
+<p style="color:#5ab99a;margin:8px 0">Seu link oficial já configurado</p>
+<input id="nomeRecarga" placeholder="Seu nome completo">
+<input id="valorRecarga" type="number" placeholder="Valor ex: 20">
+<button class="btn btnAmarelo" onclick="salvarPedido()">1️⃣ Salvar Pedido</button>
+<p id="msgRecarga" style="color:#facc15;margin-top:8px"></p>
+<a href="https://link.mercadopago.com.br/dolarcanopus" target="_blank" class="btn btnAzul" style="margin-top:12px">2️⃣ 🛒 Pagar no Mercado Pago</a>
+<p style="color:#5ab99a;font-size:12px;margin-top:8px">Após pagar, a Dona libera seu crédito</p>
 </div>
 
-<div id="aba3" class="aba" style="border-color:#facc15">
-<b style="color:#facc15">🔒 Área Dono</b>
-<p style="color:#5ab99a;margin-top:10px">Você está logada!</p>
-<button class="btnCam" style="background:#facc15;margin-top:14px" onclick="esconderDono()">Esconder Dono</button>
+<!-- ABA 3 DONO -->
+<div id="a3" class="aba abaDono">
+<div style="text-align:center"><b style="color:#facc15;font-size:18px">🔒 Área do Dono</b><p style="color:#5ab99a">Logada como Dona Mirene</p></div>
+
+<div style="margin-top:14px">
+<b>📋 Pedidos Pendentes:</b>
+<div id="listaPendentes"></div>
+</div>
+
+<hr style="border-color:#1b5a47;margin:14px 0">
+
+<b>Liberar crédito direto:</b>
+<input id="nomeLiberar" placeholder="Nome do cliente">
+<input id="valorLiberar" type="number" placeholder="Valor">
+<button class="btn btnAmarelo" onclick="liberarDireto()">Liberar Direto</button>
+<p id="msgLiberar" style="color:#facc15;text-align:center;margin-top:6px"></p>
+
+<hr style="border-color:#1b5a47;margin:14px 0">
+
+<b>💰 Todos os Saldos:</b>
+<div id="listaSaldos" style="margin-top:6px;line-height:28px"></div>
+
+<button class="btn" style="background:#000;color:#666;border:1px solid #333;margin-top:18px" onclick="esconderDono()">Esconder Dono</button>
 </div>
 
 <script>
-let toques = 0;
-let donoLogado = localStorage.getItem('donoLog') === '1';
-const SENHA = "De@1mirene";
+let toques=0;
+let saldos={}; try{saldos=JSON.parse(localStorage.getItem('canopus_saldos')||'{}')}catch(e){saldos={}}
+let nomes={}; try{nomes=JSON.parse(localStorage.getItem('canopus_nomes')||'{}')}catch(e){nomes={}}
+let pedidos=[]; try{pedidos=JSON.parse(localStorage.getItem('canopus_ped')||'[]')}catch(e){pedidos=[]}
+const SENHA="De@1mirene";
+
+// Se já logou antes, mostra o botão
+if(localStorage.getItem('canopus_dono')==='1'){
+  document.getElementById('tabDono').classList.add('ver');
+}
+
+// 5 TOQUES NO NOME DO APP
+document.getElementById('tituloApp').addEventListener('click',function(){
+  toques++;
+  if(toques>=5){
+    toques=0;
+    let s=prompt('Senha da Dona:');
+    if(s===SENHA){
+      localStorage.setItem('canopus_dono','1');
+      document.getElementById('tabDono').classList.add('ver');
+      abrir(3);
+      alert('Liberado! Área do Dono ativada');
+    } else if(s){ alert('Senha errada'); }
+  }
+  setTimeout(()=>{toques=0},3000);
+});
 
 function compartilhar(){
-  const url = "https://7-maker.github.io/Cr-dito-canopus/";
-  const texto = "🌿 Crédito Canopus - Mercadinho Digital! " + url;
-  window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
+  let url="https://7-maker.github.io/Cr-dito-canopus/";
+  window.open('https://wa.me/?text='+encodeURIComponent('🌿 Crédito Canopus - Mercadinho Digital: '+url),'_blank');
 }
 
-function clique5vezes(){
-  toques++;
-  if(toques >= 5){
-    toques = 0;
-    let s = prompt('Senha do Dono:');
-    if(s === SENHA){
-      donoLogado = true;
-      localStorage.setItem('donoLog','1');
-      document.getElementById('t3').classList.add('mostrar');
-      mostrar(3);
-    } else if(s){
-      alert('Senha errada');
-    }
-  }
-}
-
-function mostrar(n){
-  document.getElementById('aba1').classList.remove('ativa');
-  document.getElementById('aba2').classList.remove('ativa');
-  document.getElementById('aba3').classList.remove('ativa');
+function abrir(n){
+  document.getElementById('a1').classList.remove('on');
+  document.getElementById('a2').classList.remove('on');
+  document.getElementById('a3').classList.remove('on');
   document.getElementById('t1').classList.remove('ativo');
   document.getElementById('t2').classList.remove('ativo');
-  
-  if(n===1){document.getElementById('aba1').classList.add('ativa'); document.getElementById('t1').classList.add('ativo')}
-  if(n===2){document.getElementById('aba2').classList.add('ativa'); document.getElementById('t2').classList.add('ativo')}
-  if(n===3){document.getElementById('aba3').classList.add('ativa'); document.getElementById('t3').classList.add('ativo')}
+  document.getElementById('tabDono').classList.remove('ativo');
+  if(n===1){document.getElementById('a1').classList.add('on');document.getElementById('t1').classList.add('ativo')}
+  if(n===2){document.getElementById('a2').classList.add('on');document.getElementById('t2').classList.add('ativo')}
+  if(n===3){document.getElementById('a3').classList.add('on');document.getElementById('tabDono').classList.add('ativo')}
 }
 
 function esconderDono(){
-  donoLogado = false;
-  localStorage.setItem('donoLog','0');
-  document.getElementById('t3').classList.remove('mostrar');
-  mostrar(1);
+  localStorage.setItem('canopus_dono','0');
+  document.getElementById('tabDono').classList.remove('ver');
+  abrir(1);
 }
 
-if(donoLogado){
-  document.getElementById('t3').classList.add('mostrar');
+function atualizarTudo(){
+  let l=document.getElementById('listaSaldos'); l.innerHTML='';
+  for(let k in saldos){ l.innerHTML+=(nomes[k]||k)+': R$ '+Number(saldos[k]).toFixed(2)+'<br>' }
+  if(Object.keys(saldos).length===0) l.innerHTML='<small style=color:#666>Nenhum saldo ainda</small>';
+
+  let lp=document.getElementById('listaPendentes'); lp.innerHTML='';
+  let tem=false;
+  for(let i=0;i<pedidos.length;i++){
+    if(pedidos[i].status==='pendente'){
+      tem=true;
+      lp.innerHTML+=`<div class="pend"><b>${pedidos[i].nome}</b> - R$ ${pedidos[i].valor}
+      <button class="btn btnVerde" onclick="aprovar(${i})">✅ Aprovar</button>
+      <button class="btn btnVermelho" onclick="rejeitar(${i})">❌ Rejeitar</button>
+      </div>`;
+    }
+  }
+  if(!tem) lp.innerHTML='<small style=color:#666>Sem pedidos pendentes</small>';
+
+  localStorage.setItem('canopus_saldos',JSON.stringify(saldos));
+  localStorage.setItem('canopus_nomes',JSON.stringify(nomes));
+  localStorage.setItem('canopus_ped',JSON.stringify(pedidos));
 }
+
+function liberarDireto(){
+  let o=document.getElementById('nomeLiberar').value.trim();
+  let v=parseFloat(document.getElementById('valorLiberar').value);
+  if(!o||!v){alert('Digite nome e valor');return}
+  let c=o.toLowerCase();
+  saldos[c]=(saldos[c]||0)+v;
+  nomes[c]=o;
+  document.getElementById('msgLiberar').innerText='Liberado R$ '+v+' para '+o;
+  atualizarTudo();
+}
+
+function salvarPedido(){
+  let o=document.getElementById('nomeRecarga').value.trim();
+  let v=parseFloat(document.getElementById('valorRecarga').value);
+  if(!o||!v){alert('Digite seu nome e valor');return}
+  pedidos.push({nome:o,valor:v,status:'pendente'});
+  document.getElementById('msgRecarga').innerText='Pedido salvo! Agora clique no botão azul para pagar';
+  atualizarTudo();
+}
+
+function aprovar(i){
+  let p=pedidos[i];
+  let c=p.nome.toLowerCase();
+  saldos[c]=(saldos[c]||0)+p.valor;
+  nomes[c]=p.nome;
+  p.status='aprovado';
+  alert('Aprovado R$ '+p.valor+' para '+p.nome);
+  atualizarTudo();
+}
+
+function rejeitar(i){
+  if(confirm('Rejeitar pedido de '+pedidos[i].nome+'?')){
+    pedidos.splice(i,1);
+    atualizarTudo();
+  }
+}
+
+function descontar(){
+  let o=document.getElementById('nomePagar').value.trim();
+  let c=o.toLowerCase();
+  let v=parseFloat(document.getElementById('valorPagar').value);
+  if(!o||!v){alert('Digite nome e valor');return}
+  if((saldos[c]||0)<v){alert('Saldo insuficiente');return}
+  saldos[c]-=v;
+  document.getElementById('msgPagar').innerText='Descontado R$ '+v+' de '+o;
+  atualizarTudo();
+}
+
+atualizarTudo();
+if(localStorage.getItem('canopus_dono')==='1'){abrir(3)}else{abrir(1)}
 </script>
-
 </body>
 </html>
