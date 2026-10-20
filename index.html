@@ -7,21 +7,22 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
 body{background:#011611;color:#fff}
-.topo{background:#05261e;padding:16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #0e3a2d}
+.topo{background:#05261e;padding:16px;display:flex;justify-content:space-between;align-items:center}
 .icon{width:48px;height:48px;background:#0db87a;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px}
-.tit{font-size:19px;font-weight:800;cursor:pointer}
+.tit{font-size:19px;font-weight:800}
 .sub{color:#5ab99a;font-size:13px}
-.btnShare{width:42px;height:42px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff}
-.card{margin:14px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:16px;padding:14px}
-.tabs{margin:14px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:16px;padding:4px;display:flex}
-.tab{flex:1;padding:11px;text-align:center;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer}
-.on{background:#193d32;color:#fff}
-.tabDono{color:#facc15;display:none}
-.tabDono.show{display:block}
-.content{margin:14px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:20px;padding:18px;text-align:center}
+.btnShare{width:38px;height:38px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer}
+.card{margin:14px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:16px;padding:14px;display:flex;justify-content:space-between}
+.tabs{margin:14px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:16px;padding:4px;display:flex;gap:4px}
+.tab{flex:1;padding:11px;text-align:center;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;color:#5ab99a}
+.tab.ativo{background:#193d32;color:#fff}
+.tabDono{display:none;color:#facc15}
+.tabDono.mostrar{display:block}
+.aba{margin:14px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:20px;padding:18px;text-align:center;display:none}
+.aba.ativa{display:block}
 .cam{margin:14px 0;background:#010a08;border-radius:18px;height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#3a9a7f}
-.btnCam{width:100%;background:#10e0a0;color:#00261c;border:none;padding:15px;border-radius:16px;font-weight:800;font-size:16px;cursor:pointer}
-.btnMp{width:100%;background:#009ee3;color:#fff;border:none;padding:15px;border-radius:16px;font-weight:800;font-size:16px;cursor:pointer;margin-top:12px;display:block;text-decoration:none}
+.btnCam{width:100%;background:#10e0a0;color:#00261c;border:none;padding:15px;border-radius:16px;font-weight:800;font-size:16px}
+.btnMp{display:block;width:100%;background:#009ee3;color:#fff;padding:15px;border-radius:16px;font-weight:800;text-decoration:none;margin-top:12px}
 </style>
 </head>
 <body>
@@ -30,88 +31,93 @@ body{background:#011611;color:#fff}
 <div style="display:flex;gap:10px;align-items:center">
 <div class="icon">🍃</div>
 <div>
-<div id="titulo" class="tit" onclick="cliqueSecreto()">Crédito Canopus 🌿</div>
+<div class="tit" onclick="clique5vezes()">Crédito Canopus 🌿</div>
 <div class="sub">Mercadinho Digital</div>
 </div>
 </div>
-<button class="btnShare" onclick="compartilhar()">↗️</button>
+<div class="btnShare" onclick="compartilhar()">↗</div>
 </div>
 
-<div class="card" style="display:flex;justify-content:space-between">
+<div class="card">
 <span style="color:#8ec9b3;font-size:14px">Titular: <b style="color:#fff">Mirene</b></span>
 <span style="color:#6ee7b7;font-size:14px">✅ Conta Ativa</span>
 </div>
 
 <div class="tabs">
-<div id="tb1" class="tab on" onclick="ver(1)">1. Pagar</div>
-<div id="tb2" class="tab" style="color:#5ab99a" onclick="ver(2)">2. Comprar Crédito</div>
-<div id="tb3" class="tab tabDono" onclick="ver(3)">3. ÁREA DO DONO</div>
+<div id="t1" class="tab ativo" onclick="mostrar(1)">1. Pagar</div>
+<div id="t2" class="tab" onclick="mostrar(2)">2. Comprar Crédito</div>
+<div id="t3" class="tab tabDono" onclick="mostrar(3)">3. ÁREA DO DONO</div>
 </div>
 
-<div id="a1" class="content">
+<div id="aba1" class="aba ativa">
 <b style="font-size:18px">Escanear QR Code do Mercadinho</b>
 <p style="color:#5ab99a;font-size:13px;margin-top:8px">Aponte a câmera para o QR Code no balcão para pagar.</p>
-<div class="cam"><div style="font-size:30px">⊞</div><p style="margin-top:10px;font-size:14px">Clique abaixo<br>para ativar a<br>câmera.</p></div>
+<div class="cam"><div style="font-size:28px">⊞</div><p style="margin-top:10px;font-size:14px">Clique abaixo<br>para ativar a<br>câmera.</p></div>
 <button class="btnCam">📷 Ativar Câmera</button>
 </div>
 
-<div id="a2" class="content" style="display:none">
-<b style="font-size:18px">Comprar Crédito</b>
-<p style="color:#5ab99a;font-size:13px;margin:10px 0">Pague com PIX ou cartão no seu link oficial</p>
+<div id="aba2" class="aba">
+<b>Comprar Crédito</b>
+<p style="color:#5ab99a;font-size:13px;margin:10px 0">Clique para pagar</p>
 <a href="https://link.mercadopago.com.br/dolarcanopus" target="_blank" class="btnMp">🛒 Pagar no Mercado Pago</a>
 </div>
 
-<div id="a3" class="content" style="display:none;border-color:#facc15">
+<div id="aba3" class="aba" style="border-color:#facc15">
 <b style="color:#facc15">🔒 Área Dono</b>
-<p style="color:#5ab99a;margin-top:10px">Logada como Dona</p>
-<button class="btnCam" style="background:#facc15;margin-top:14px" onclick="sairDono()">Esconder Dono</button>
+<p style="color:#5ab99a;margin-top:10px">Você está logada!</p>
+<button class="btnCam" style="background:#facc15;margin-top:14px" onclick="esconderDono()">Esconder Dono</button>
 </div>
 
 <script>
-var SENHA="De@1mirene";
-var toques=0;
-var dono=localStorage.getItem('donoLog')=="1";
+let toques = 0;
+let donoLogado = localStorage.getItem('donoLog') === '1';
+const SENHA = "De@1mirene";
 
 function compartilhar(){
- var url="https://7-maker.github.io/Cr-dito-canopus/";
- var txt="🌿 Crédito Canopus - Mercadinho Digital! Entra aí: "+url;
- if(navigator.share){navigator.share({title:'Canopus',text:txt,url:url})}
- else{window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank')}
+  const url = "https://7-maker.github.io/Cr-dito-canopus/";
+  const texto = "🌿 Crédito Canopus - Mercadinho Digital! " + url;
+  window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
 }
 
-function cliqueSecreto(){
- toques++;
- if(toques>=5){
-   toques=0;
-   var s=prompt('Senha do Dono:');
-   if(s==SENHA){
-     dono=true;
-     localStorage.setItem('donoLog','1');
-     document.getElementById('tb3').classList.add('show');
-     ver(3);
-   }else if(s){
-     alert('Senha errada');
-   }
- }
+function clique5vezes(){
+  toques++;
+  if(toques >= 5){
+    toques = 0;
+    let s = prompt('Senha do Dono:');
+    if(s === SENHA){
+      donoLogado = true;
+      localStorage.setItem('donoLog','1');
+      document.getElementById('t3').classList.add('mostrar');
+      mostrar(3);
+    } else if(s){
+      alert('Senha errada');
+    }
+  }
 }
 
-function ver(n){
- document.getElementById('a1').style.display=n==1?'block':'none';
- document.getElementById('a2').style.display=n==2?'block':'none';
- document.getElementById('a3').style.display=n==3?'block':'none';
- document.getElementById('tb1').className=n==1?'tab on':'tab';
- document.getElementById('tb2').className=n==2?'tab on':'tab';
- document.getElementById('tb3').className=n==3?'tab tabDono show on':'tab tabDono '+(dono?'show':'');
+function mostrar(n){
+  document.getElementById('aba1').classList.remove('ativa');
+  document.getElementById('aba2').classList.remove('ativa');
+  document.getElementById('aba3').classList.remove('ativa');
+  document.getElementById('t1').classList.remove('ativo');
+  document.getElementById('t2').classList.remove('ativo');
+  
+  if(n===1){document.getElementById('aba1').classList.add('ativa'); document.getElementById('t1').classList.add('ativo')}
+  if(n===2){document.getElementById('aba2').classList.add('ativa'); document.getElementById('t2').classList.add('ativo')}
+  if(n===3){document.getElementById('aba3').classList.add('ativa'); document.getElementById('t3').classList.add('ativo')}
 }
 
-function sairDono(){
- dono=false;
- localStorage.setItem('donoLog','0');
- document.getElementById('tb3').classList.remove('show');
- ver(1);
+function esconderDono(){
+  donoLogado = false;
+  localStorage.setItem('donoLog','0');
+  document.getElementById('t3').classList.remove('mostrar');
+  mostrar(1);
 }
 
-if(dono){document.getElementById('tb3').classList.add('show')}
+if(donoLogado){
+  document.getElementById('t3').classList.add('mostrar');
+}
 </script>
+
 </body>
 </html>
