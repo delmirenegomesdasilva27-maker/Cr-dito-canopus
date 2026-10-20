@@ -1,47 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crédito Canopus 🌿</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="https://unpkg.com/html5-qrcode"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>body{background:#061f12;color:#f0fdf4}</style>
-</head>
-<body class="min-h-screen pb-24">
-<header class="bg-emerald-950 border-b border-emerald-500/30 p-4 sticky top-0 z-40">
-<div class="max-w-md mx-auto flex justify-between items-center">
-<div class="flex gap-2 items-center"><div class="bg-emerald-600 p-2 rounded-xl"><i class="fa-solid fa-leaf"></i></div><div><h1 class="font-bold">Crédito Canopus 🌿</h1><p class="text-xs text-emerald-400">Mercadinho Digital</p></div></div>
-<button onclick="trocarUsuario()" class="text-xs bg-emerald-900 border border-emerald-700 px-3 py-2 rounded-xl"><span id="nome-usuario-atual">Mirene</span></button>
-</div>
-</header>
-<main class="max-w-md mx-auto p-4 space-y-4">
-<div class="bg-emerald-900 border border-emerald-500/30 rounded-2xl p-6">
-<p class="text-xs font-bold text-emerald-300">SALDO DISPONÍVEL</p>
-<div class="flex gap-1 mt-1"><span class="text-emerald-400 text-xl font-bold">R$</span><span id="saldo-display" class="text-4xl font-extrabold">0,00</span></div>
-<div class="mt-4 pt-4 border-t border-emerald-800 flex justify-between text-xs"><span>Titular: <strong id="titular-nome">Mirene</strong></span><span class="text-emerald-400">● Ativa</span></div>
+<!DOCTYPE html><html lang=pt-BR><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Canopus</title><style>body{background:#001f17;color:#fff;font-family:sans-serif;max-width:400px;margin:auto;padding:10px}button{width:100%;padding:12px;border-radius:10px;border:none;font-weight:bold;margin-top:6px}input{width:100%;padding:12px;border-radius:10px;border:1px solid #0a5; background:#003322;color:#fff;margin-top:6px;box-sizing:border-box}.card{background:#002e22;padding:12px;border-radius:12px;margin-top:10px;border:1px solid #0a5}.tab{display:flex;gap:4px}.tab button{font-size:12px}</style></head><body>
+<h3 style=text-align:center>🌿 Crédito Canopus</h3>
+<div class=card>Saldo: R$ <span id=saldo>0,00</span> <small id=nome></small></div>
+<div class="tab card" style=padding:6px>
+<button id=b1 onclick="ver(1)" style=background:#10b981>1 Pagar</button>
+<button id=b2 onclick="ver(2)">2 Recarregar</button>
+<button id=b3 onclick="ver(3)" style=background:#fbbf24;color:#000>3 Dono</button>
 </div>
 
-<div class="grid grid-cols-3 gap-1 bg-emerald-950 p-1 rounded-xl border border-emerald-800 text-xs font-bold">
-<button id="btn-pagar" onclick="mudarAba('pagar')" class="py-3 rounded-lg bg-emerald-900 text-white">1. Pagar</button>
-<button id="btn-recargar" onclick="mudarAba('recargar')" class="py-3 rounded-lg text-emerald-400">2. Crédito</button>
-<button id="btn-dono" onclick="mudarAba('dono')" class="py-3 rounded-lg text-amber-400">3. Dono</button>
-</div>
-
-<div id="aba-pagar">
-<div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5 text-center">
-<h2 class="font-semibold">Escanear QR do Mercadinho</h2>
-<p class="text-xs text-emerald-400 mt-1">Aponte a câmera para o QR no balcão</p>
-<div class="rounded-xl overflow-hidden bg-black border border-emerald-800 min-h-[200px] flex items-center justify-center mt-3"><div id="reader" class="w-full"></div><div id="reader-placeholder"><i class="fa-solid fa-qrcode text-4xl text-emerald-500/50"></i><p class="text-xs text-emerald-600 mt-2">Ativar câmera</p></div></div>
-<button onclick="iniciarCamera()" class="w-full mt-4 bg-emerald-500 text-emerald-950 font-bold py-3 rounded-xl">📷 Ativar Câmera</button>
-</div>
-</div>
-
-<div id="aba-recargar" class="hidden">
-<div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5 text-center space-y-3">
-<h2 class="font-bold text-lg">Comprar Crédito</h2>
-<p class="text-xs text-emerald-400">Seu link com valor livre - cliente escolhe quanto pagar</p>
-<div class="bg-emerald-900/50 p-3 rounded-xl border border-emerald-700">
-<p class="text-xs text-emerald-300">Ex: R$ 3, R$ 12,50, R$ 100 -
+<div id=a1 class=card><b>1. Escanear QR do mercadinho</b><div id=reader style=
