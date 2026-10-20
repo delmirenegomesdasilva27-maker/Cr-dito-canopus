@@ -34,6 +34,7 @@ Nome
 <button class=btn style=background:#10b981;color:#000 onclick="ver(1)">1 Pagar</button>
 <button class=btn style=background:#fff;color:#000 onclick="ver(2)">2 Recarregar</button>
 <button id=btnDono class=btn style=background:#fbbf24;color:#000 onclick="ver(3)">3 Dono 🔒</button>
+<button class=btn style=background:#25D366;color:#fff;margin-top:12px" onclick="compartilhar()">📤 Compartilhar App</button>
 </div>
 
 <div id=a1 class=card>
@@ -93,6 +94,17 @@ var pedidos=[];try{pedidos=JSON.parse(localStorage.getItem('ped')||'[]')}catch(e
 var atual=localStorage.getItem('tit')||'';
 var donoLogado=localStorage.getItem('donoLog')=="1";
 
+function compartilhar(){
+ var url="https://7-maker.github.io/Cr-dito-canopus/";
+ var texto="🌿 Crédito Canopus - Meu app da cantina! Entra aí: ";
+ if(navigator.share){
+   navigator.share({title:'Crédito Canopus',text:texto,url:url});
+ }else{
+   navigator.clipboard.writeText(texto+url);
+   alert('Link copiado! Cole no WhatsApp:\n'+url);
+ }
+}
+
 function cliqueSecreto(){cliques++;if(cliques>=5){cliques=0;var s=prompt('Senha do Dono:');if(s==SENHA){donoLogado=true;localStorage.setItem('donoLog','1');document.getElementById('btnDono').style.display='block';ver(3);checarSenhaAuto();}else if(s!=null){alert('Senha errada');}}}
 
 function checarSenhaAuto(){document.getElementById('areaSenha').style.display='none';document.getElementById('areaDono').style.display='block';upd();}
@@ -126,16 +138,4 @@ function gerarQR(){var v=document.getElementById('vp').value;if(!v){alert('Digit
 
 function liberar(){if(!donoLogado){alert('Só Dono!');return}var o=document.getElementById('nn').value.trim();var v=parseFloat(document.getElementById('vv').value);if(!o||!v){alert('Nome e valor');return}var c=o.toLowerCase();saldos[c]=(saldos[c]||0)+v;nomes[c]=o;document.getElementById('m3').innerText='Liberado R$ '+v+' pra '+o;document.getElementById('nn').value='';document.getElementById('vv').value='';upd();}
 
-function preparar(){var o=document.getElementById('nRec').value.trim();var v=parseFloat(document.getElementById('vRec').value);if(!o||!v){alert('Nome e valor');return}pedidos.push({nome:o,valor:v,status:'pendente'});document.getElementById('msg2').innerText='Pedido SALVO! Pague no botão azul.';document.getElementById('linkMp').style.display='block';upd();}
-
-function aprovar(i){var p=pedidos[i];var c=p.nome.toLowerCase();saldos[c]=(saldos[c]||0)+p.valor;nomes[c]=p.nome;p.status='aprovado';alert('APROVADO R$ '+p.valor+' para '+p.nome);upd();}
-
-function rejeitar(i){if(confirm('Rejeitar?')){pedidos.splice(i,1);upd();}}
-
-function descontar(){var o=document.getElementById('nd').value.trim()||nomes[atual]||atual;if(!o){alert('Digite nome');return}var c=o.toLowerCase();var v=parseFloat(document.getElementById('vd').value);if(!v){alert('Valor');return}if((saldos[c]||0)<v){alert('Sem saldo! Tem R$ '+(saldos[c]||0));return}saldos[c]-=v;upd();document.getElementById('msg1').innerText='Descontado R$ '+v+' de '+(nomes[c]||o);document.getElementById('vd').value='';}
-
-upd();ver(1);
-if(location.search.includes('dono=De@1mirene')){donoLogado=true;localStorage.setItem('donoLog','1');document.getElementById('btnDono').style.display='block';}
-</script>
-</body>
-</html>
+function preparar(){var o=document.getElementById('nRec').value.trim();var v=parseFloat(document.getElementById('vRec').value);if(!o||!v){alert('Nome e valor');return}pedidos.push({nome:o,
