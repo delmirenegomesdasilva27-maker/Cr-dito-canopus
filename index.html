@@ -113,7 +113,7 @@
       </div>
     </div>
 
-    <!-- ABA 3: ÁREA DO DONO -->
+    <!-- ABA 3: ÁREA DO DONO (GERAR COBRANÇA) -->
     <div id="conteudo-dono" class="hidden space-y-4">
       <div class="bg-slate-950 border border-amber-500/40 rounded-2xl p-5 space-y-4">
         <div class="border-b border-slate-800 pb-3 text-center">
@@ -168,7 +168,6 @@
   </div>
 
   <script>
-    // Teu Access Token do Mercado Pago já está configurado aqui:
     const MP_ACCESS_TOKEN = "APP_USR-4009972620756861-101920-956773d98dc953c098ee6a646069ba4e-3774580703";
 
     let usuarioAtual = localStorage.getItem('credito_canopus_usuario_atual') || "Mirene";
@@ -276,3 +275,107 @@
       user.historico.unshift({ tipo: 'saida', desc: pendentePagamento.desc || pendentePagamento.loja, valor: pendentePagamento.valor, data: new Date().toLocaleDateString('pt-BR') });
       salvardb(); 
       atualizarTela(); 
+      fecharModal(); 
+      alert("Pagamento realizado com sucesso!");
+    }
+
+    /* GERAÇÃO E VERIFICAÇÃO AUTOMÁTICA DE PIX VIA MERCADO PAGO */
+    async function gerarPixAutomatico() {
+      const valor = parseFloat(document.getElementById('valor-recarga-pix').value);
+      if(!valor || valor <= 0) { alert("Digite um valor válido para recarga."); return; }
+
+      document.getElementById('status-verificacao-pix').innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1 text-amber-400"></i> Gerando Pix...`;
+
+      try {
+        const response = await fetch("https://api.mercadopago.com/v1/payments", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${MP_ACCESS_TOKEN}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            transaction_amount: valor,
+            description: `Recarga Crédito Canopus - ${usuarioAtual}`,
+            payment_method_id: "pix",
+            payer: { email: "cliente@canopus.com" }
+          })
+        });
+
+        const data = await response.json();
+
+        if(data.id) {
+          const qrCodeBase64 = data.point_of_interaction.transaction_data.qr_code_base64;
+          pixCopiaEColaAtual = data.point_of_interaction.transaction_data.qr_code;
+
+          const container = document.getElementById('qrcode-pix-dinamico');
+          container.innerHTML = `<img src="data:image/jpeg;base64,${qrCodeBase64}" class="w-40 h-40">`;
+          
+          document.getElementById('area-qr-pix-gerado').classList.remove('hidden');
+          document.getElementById('status-verificacao-pix').innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1 text-amber-400"></i> Aguardando pagamento no banco...`;
+
+          iniciarMonitoramentoPagamento(data.id, valor);
+        } else {
+          alert("Erro ao gerar Pix. Verifique os dados.");
+        }
+      } catch(e) {
+        alert("Erro na conexão com Mercado Pago.");
+      }
+    }
+
+    function iniciarMonitoramentoPagamento(paymentId, valor) {
+      if(intervaloChecagemPix) clearInterval(intervaloChecagemPix);
+
+      intervaloChecagemPix = setInterval(async () => {
+        try {
+          const res = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+            headers: { "Authorization": `Bearer ${MP_ACCESS_TOKEN}` }
+          });
+          const paymentData = await res.json();
+
+          if(paymentData.status === "approved") {
+            clearInterval(intervaloChecagemPix);
+            
+            const user = dadosApp.usuarios[usuarioAtual];
+            user.saldo += valor;
+            user.historico.unshift({ tipo: 'entrada', desc: 'Recarga Pix Automática', valor: valor, data: new Date().toLocaleDateString('pt-BR') });
+            salvardb();
+            atualizarTela();
+
+            document.getElementById('area-qr-pix-gerado').classList.add('hidden');
+            document.getElementById('valor-recarga-pix').value = "";
+            alert(`🎉 Pagamento Confirmado! R$ ${valor.toFixed(2)} adicionados automaticamente à carteira de ${usuarioAtual}.`);
+          }
+        } catch(e) {}
+      }, 3000);
+    }
+
+    function copiarPixCopiaECola() {
+      if(!pixCopiaEColaAtual) return;
+      navigator.clipboard.writeText(pixCopiaEColaAtual);
+      alert("Código Pix Copia e Cola copiado!");
+    }
+
+    /* ÁREA DO DONO */
+    function autenticarDono() {
+      const senha = document.getElementById('senha-dono-input').value;
+      if(senha === "canopus123") {
+        document.getElementById('painel-senha-dono').classList.add('hidden');
+        document.getElementById('painel-acoes-dono').classList.remove('hidden');
+      } else {
+        alert("Senha incorreta!");
+      }
+    }
+
+    function gerarQrCodeCobranca() {
+      const valor = parseFloat(document.getElementById('valor-cobrativo').value);
+      if(!valor || valor <= 0) { alert("Informe o valor."); return; }
+      const payload = JSON.stringify({ loja: "Mercadinho Canopus", desc: document.getElementById('desc-cobrativo').value || 'Compra', valor: valor });
+      const container = document.getElementById('canvas-qr-cobranca');
+      container.innerHTML = "";
+      new QRCode(container, { text: payload, width: 160, height: 160 });
+      document.getElementById('titulo-cobranca').innerText = `Mercadinho Canopus - R$ ${valor.toFixed(2)}`;
+      document.getElementById('box-qr-cobranca').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
