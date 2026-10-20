@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crédito Canopus 🌿 - Carteira Digital</title>
+  <title>Crédito Canopus 🌿</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
-    body { background-color: #061f12; color: #f0fdf4; font-family: sans-serif; translate: no; }
+    body { background-color: #061f12; color: #f0fdf4; font-family: sans-serif; }
   </style>
 </head>
-<body class="min-h-screen pb-20" translate="no">
+<body class="min-h-screen pb-20">
 
   <header class="bg-emerald-950 border-b border-emerald-500/30 p-4 sticky top-0 z-40">
     <div class="max-w-md mx-auto flex items-center justify-between">
@@ -27,11 +27,11 @@
       </div>
       
       <div class="flex items-center space-x-2">
-        <button onclick="compartilharApp()" class="text-xs bg-emerald-800 text-emerald-200 border border-emerald-600 p-2 rounded-xl flex items-center justify-center" title="Compartilhar App">
+        <button onclick="compartilharApp()" class="text-xs bg-emerald-800 text-emerald-200 border border-emerald-600 p-2 rounded-xl">
           <i class="fa-solid fa-share-nodes text-sm"></i>
         </button>
-        <button onclick="trocarUsuario()" class="text-xs bg-emerald-900 border border-emerald-700 px-3 py-2 rounded-xl flex items-center space-x-1.5 text-emerald-200">
-          <i class="fa-solid fa-user-gear text-emerald-400"></i>
+        <button onclick="trocarUsuario()" class="text-xs bg-emerald-900 border border-emerald-700 px-3 py-2 rounded-xl text-emerald-200 flex items-center space-x-1">
+          <i class="fa-solid fa-user text-emerald-400"></i>
           <span id="nome-usuario-atual">Mirene</span>
         </button>
       </div>
@@ -52,27 +52,27 @@
       </div>
     </div>
 
-    <!-- NAVEGAÇÃO: 3 BOTÕES -->
+    <!-- 3 BOTÕES DE NAVEGAÇÃO -->
     <div class="grid grid-cols-3 gap-1 bg-emerald-950 p-1 rounded-xl border border-emerald-800 text-xs font-bold">
-      <button id="tab-pagar" onclick="mudarAba('pagar')" class="py-3 rounded-lg text-emerald-200 bg-emerald-900 shadow text-center">
+      <button id="btn-tab-pagar" onclick="mudarAba('pagar')" class="py-3 rounded-lg text-emerald-100 bg-emerald-900 shadow text-center">
         1. Pagar
       </button>
-      <button id="tab-recargar" onclick="mudarAba('recargar')" class="py-3 rounded-lg text-emerald-400 text-center">
+      <button id="btn-tab-recargar" onclick="mudarAba('recargar')" class="py-3 rounded-lg text-emerald-400 text-center">
         2. Comprar Crédito
       </button>
-      <button id="tab-dono" onclick="mudarAba('dono')" class="py-3 rounded-lg text-amber-400 text-center">
+      <button id="btn-tab-dono" onclick="mudarAba('dono')" class="py-3 rounded-lg text-amber-400 text-center">
         3. ÁREA DO DONO
       </button>
     </div>
 
-    <!-- ABA 1: PAGAR COM CÂMERA -->
-    <div id="conteudo-pagar" class="space-y-4">
+    <!-- ABA 1: PAGAR -->
+    <div id="aba-pagar" class="space-y-4">
       <div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5 text-center">
         <h2 class="font-semibold text-white mb-1">Escanear QR Code do Mercadinho</h2>
         <p class="text-xs text-emerald-400 mb-4">Aponte a câmera para o QR Code no balcão para pagar.</p>
-        <div id="reader-container" class="relative rounded-xl overflow-hidden bg-slate-950 border border-emerald-800 min-h-[220px] flex items-center justify-center">
+        <div class="relative rounded-xl overflow-hidden bg-slate-950 border border-emerald-800 min-h-[200px] flex items-center justify-center">
           <div id="reader" class="w-full"></div>
-          <div id="reader-placeholder" class="text-center p-6 space-y-3">
+          <div id="reader-placeholder" class="text-center p-6 space-y-2">
             <i class="fa-solid fa-qrcode text-4xl text-emerald-500/50"></i>
             <p class="text-xs text-emerald-400">Clique abaixo para ativar a câmera.</p>
           </div>
@@ -83,14 +83,14 @@
       </div>
     </div>
 
-    <!-- ABA 2: COMPRAR CRÉDITO AUTOMÁTICO (QR CODE PIX DINÂMICO) -->
-    <div id="conteudo-recargar" class="hidden space-y-4">
+    <!-- ABA 2: COMPRAR CRÉDITO (AUTOMÁTICO) -->
+    <div id="aba-recargar" class="hidden space-y-4">
       <div class="bg-emerald-950 border border-emerald-800 rounded-2xl p-5 space-y-4 text-center">
         <h2 class="font-bold text-white text-base">Comprar Crédito via Pix Automático</h2>
-        <p class="text-xs text-emerald-400">Digite o valor desejado para gerar o QR Code Pix com verificação automática:</p>
+        <p class="text-xs text-emerald-400">Digite o valor em R$ para gerar o QR Code Pix:</p>
         
         <div class="space-y-2">
-          <input type="number" id="valor-recarga-pix" placeholder="Valor em R$ (Ex: 10.00)" class="w-full bg-emerald-900 border border-emerald-700 rounded-xl p-3 text-white text-center font-bold text-lg focus:outline-none focus:border-emerald-400">
+          <input type="number" id="valor-recarga-pix" placeholder="Valor (Ex: 10.00)" class="w-full bg-emerald-900 border border-emerald-700 rounded-xl p-3 text-white text-center font-bold text-lg">
           <button onclick="gerarPixAutomatico()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-black py-3.5 rounded-xl text-sm transition shadow-lg flex items-center justify-center space-x-2">
             <i class="fa-solid fa-bolt"></i>
             <span>Gerar QR Code Pix</span>
@@ -98,14 +98,14 @@
         </div>
 
         <div id="area-qr-pix-gerado" class="hidden space-y-3 border-t border-emerald-800/80 pt-4">
-          <p class="text-xs text-emerald-300 font-bold">Escaneie o QR Code abaixo com o aplicativo do seu banco:</p>
-          <div id="qrcode-pix-dinamico" class="flex justify-center p-4 bg-white rounded-2xl inline-block mx-auto shadow-inner"></div>
+          <p class="text-xs text-emerald-300 font-bold">Escaneie o QR Code abaixo no app do banco:</p>
+          <div id="qrcode-pix-dinamico" class="flex justify-center p-4 bg-white rounded-2xl inline-block mx-auto"></div>
           
           <div class="bg-emerald-900/60 p-3 rounded-xl space-y-2">
-            <p class="text-[11px] text-emerald-300 font-medium" id="status-verificacao-pix">
+            <p class="text-xs text-emerald-300 font-medium" id="status-verificacao-pix">
               <i class="fa-solid fa-spinner fa-spin mr-1 text-amber-400"></i> Aguardando pagamento...
             </p>
-            <button onclick="copiarPixCopiaECola()" class="w-full bg-emerald-800 hover:bg-emerald-700 text-emerald-100 text-xs py-2 rounded-lg font-bold">
+            <button onclick="copiarPixCopiaECola()" class="w-full bg-emerald-800 text-emerald-100 text-xs py-2 rounded-lg font-bold">
               <i class="fa-solid fa-copy mr-1"></i> Copiar Pix Copia e Cola
             </button>
           </div>
@@ -113,28 +113,27 @@
       </div>
     </div>
 
-    <!-- ABA 3: ÁREA DO DONO (GERAR COBRANÇA) -->
-    <div id="conteudo-dono" class="hidden space-y-4">
+    <!-- ABA 3: ÁREA DO DONO -->
+    <div id="aba-dono" class="hidden space-y-4">
       <div class="bg-slate-950 border border-amber-500/40 rounded-2xl p-5 space-y-4">
         <div class="border-b border-slate-800 pb-3 text-center">
-          <h2 class="font-bold text-amber-300 text-base"><i class="fa-solid fa-lock mr-1.5"></i> ÁREA DO DONO DO MERCADO</h2>
-          <p class="text-xs text-slate-400 mt-0.5">Acesso exclusivo para gerenciar cobranças.</p>
+          <h2 class="font-bold text-amber-300 text-base"><i class="fa-solid fa-lock mr-1.5"></i> ÁREA DO DONO</h2>
+          <p class="text-xs text-slate-400 mt-0.5">Gerar cobranças para o balcão.</p>
         </div>
 
         <div id="painel-senha-dono" class="space-y-3">
-          <p class="text-xs text-slate-300 text-center font-semibold">Digite a senha administrativa:</p>
           <input type="password" id="senha-dono-input" placeholder="Senha (canopus123)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center text-sm">
-          <button onclick="autenticarDono()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-xl text-sm transition">
+          <button onclick="autenticarDono()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-xl text-sm">
             Entrar
           </button>
         </div>
 
-        <div id="painel-acoes-dono" class="hidden space-y-5 pt-1">
+        <div id="painel-acoes-dono" class="hidden space-y-4">
           <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-3">
-            <h3 class="text-xs font-bold text-amber-300 uppercase tracking-wider"><i class="fa-solid fa-qrcode mr-1"></i> Gerar QR Code de Cobrança (Balcão)</h3>
+            <h3 class="text-xs font-bold text-amber-300 uppercase"><i class="fa-solid fa-qrcode mr-1"></i> Gerar Cobrança do Balcão</h3>
             <input type="number" id="valor-cobrativo" placeholder="Valor (Ex: 5.50)" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-sm">
             <input type="text" id="desc-cobrativo" placeholder="Descrição (Ex: Lanche)" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-sm">
-            <button onclick="gerarQrCodeCobranca()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs">
+            <button onclick="gerarQrCodeCobranca()" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-xs">
               Gerar QR Code de Compra
             </button>
             
@@ -156,8 +155,9 @@
     </div>
   </main>
 
+  <!-- MODAL DE DEBITO -->
   <div id="modal-confirmar" class="fixed inset-0 bg-slate-950/80 hidden flex items-center justify-center p-4 z-50">
-    <div class="bg-emerald-950 border border-emerald-500 rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl">
+    <div class="bg-emerald-950 border border-emerald-500 rounded-2xl max-w-sm w-full p-6 text-center space-y-4">
       <h3 class="font-bold text-white text-lg" id="modal-loja-nome">Mercadinho Canopus</h3>
       <p class="text-3xl font-black text-emerald-400" id="modal-loja-valor">R$ 0,00</p>
       <div class="flex space-x-2">
@@ -168,14 +168,12 @@
   </div>
 
   <script>
-    const MP_ACCESS_TOKEN = "APP_USR-4009972620756861-101920-956773d98dc953c098ee6a646069ba4e-3774580703";
+    var MP_ACCESS_TOKEN = "APP_USR-4009972620756861-101920-956773d98dc953c098ee6a646069ba4e-3774580703";
+    var usuarioAtual = localStorage.getItem('credito_canopus_usuario_atual') || "Mirene";
+    var dadosApp = JSON.parse(localStorage.getItem('credito_canopus_db')) || { usuarios: {} };
+    var html5QrCode = null, pendentePagamento = null, intervaloChecagemPix = null, pixCopiaEColaAtual = "";
 
-    let usuarioAtual = localStorage.getItem('credito_canopus_usuario_atual') || "Mirene";
-    let dadosApp = JSON.parse(localStorage.getItem('credito_canopus_db')) || { usuarios: {} };
-    let html5QrCode = null, pendentePagamento = null;
-    let intervaloChecagemPix = null, pixCopiaEColaAtual = "";
-
-    window.onload = () => {
+    window.onload = function() {
       if(!dadosApp.usuarios[usuarioAtual]) {
         dadosApp.usuarios[usuarioAtual] = { saldo: 0, historico: [] };
         salvardb();
@@ -187,21 +185,49 @@
 
     function atualizarTela() {
       if(!dadosApp.usuarios[usuarioAtual]) dadosApp.usuarios[usuarioAtual] = { saldo: 0, historico: [] };
-      const user = dadosApp.usuarios[usuarioAtual];
+      var user = dadosApp.usuarios[usuarioAtual];
       document.getElementById('saldo-display').innerText = user.saldo.toFixed(2).replace('.', ',');
       document.getElementById('titular-nome').innerText = usuarioAtual;
       document.getElementById('nome-usuario-atual').innerText = usuarioAtual;
 
-      const lista = document.getElementById('lista-historico');
+      var lista = document.getElementById('lista-historico');
       if (user.historico.length === 0) {
-        lista.innerHTML = `<p class="text-emerald-600 text-center py-2">Nenhuma movimentação registrada.</p>`;
+        lista.innerHTML = '<p class="text-emerald-600 text-center py-2">Nenhuma movimentação registrada.</p>';
       } else {
-        lista.innerHTML = user.historico.map(i => `<div class="flex justify-between bg-emerald-900/40 p-2.5 rounded-xl border border-emerald-800"><span>${i.desc}</span><span class="${i.tipo === 'entrada' ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}">${i.tipo === 'entrada' ? '+' : '-'} R$ ${i.valor.toFixed(2).replace('.', ',')}</span></div>`).join('');
+        lista.innerHTML = user.historico.map(function(i) {
+          return '<div class="flex justify-between bg-emerald-900/40 p-2.5 rounded-xl border border-emerald-800"><span>' + i.desc + '</span><span class="' + (i.tipo === 'entrada' ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold') + '">' + (i.tipo === 'entrada' ? '+' : '-') + ' R$ ' + i.valor.toFixed(2).replace('.', ',') + '</span></div>';
+        }).join('');
+      }
+    }
+
+    function mudarAba(aba) {
+      if(intervaloChecagemPix) clearInterval(intervaloChecagemPix);
+      
+      document.getElementById('aba-pagar').classList.add('hidden');
+      document.getElementById('aba-recargar').classList.add('hidden');
+      document.getElementById('aba-dono').classList.add('hidden');
+
+      document.getElementById('btn-tab-pagar').className = "py-3 rounded-lg text-emerald-400 text-center";
+      document.getElementById('btn-tab-recargar').className = "py-3 rounded-lg text-emerald-400 text-center";
+      document.getElementById('btn-tab-dono').className = "py-3 rounded-lg text-amber-400 text-center";
+
+      document.getElementById('aba-' + aba).classList.remove('hidden');
+
+      if(aba === 'pagar') {
+        document.getElementById('btn-tab-pagar').className = "py-3 rounded-lg text-emerald-100 bg-emerald-900 font-bold shadow text-center";
+      } else if(aba === 'recargar') {
+        document.getElementById('btn-tab-recargar').className = "py-3 rounded-lg text-emerald-100 bg-emerald-900 font-bold shadow text-center";
+      } else if(aba === 'dono') {
+        document.getElementById('btn-tab-dono').className = "py-3 rounded-lg text-amber-950 bg-amber-400 font-bold shadow text-center";
+      }
+
+      if(aba !== 'pagar' && html5QrCode && html5QrCode.isScanning) {
+        html5QrCode.stop();
       }
     }
 
     function trocarUsuario() {
-      const nome = prompt("Digite o nome para alternar de carteira:", usuarioAtual);
+      var nome = prompt("Digite o nome do utilizador:", usuarioAtual);
       if(nome && nome.trim() !== "") { 
         usuarioAtual = nome.trim(); 
         localStorage.setItem('credito_canopus_usuario_atual', usuarioAtual);
@@ -214,47 +240,29 @@
     }
 
     function compartilharApp() {
-      const url = window.location.href;
-      const texto = `🌿 Crédito Canopus - Carteira Digital do Mercadinho\n\n${url}`;
-      if (navigator.share) { navigator.share({ title: 'Crédito Canopus', text: texto, url }).catch(()=>{}); }
-      else { navigator.clipboard.writeText(texto); alert("Link copiado!"); }
-    }
-
-    function mudarAba(aba) {
-      if(intervaloChecagemPix) clearInterval(intervaloChecagemPix);
-      ['pagar', 'recargar', 'dono'].forEach(a => {
-        document.getElementById(`conteudo-${a}`).classList.add('hidden');
-        document.getElementById(`tab-${a}`).className = (a === 'dono') 
-          ? "py-3 rounded-lg text-amber-400 text-center" 
-          : "py-3 rounded-lg text-emerald-400 text-center";
-      });
-
-      document.getElementById(`conteudo-${aba}`).classList.remove('hidden');
-      document.getElementById(`tab-${aba}`).className = (aba === 'dono') 
-        ? "py-3 rounded-lg text-amber-950 bg-amber-400 font-bold shadow text-center" 
-        : "py-3 rounded-lg text-emerald-100 bg-emerald-900 font-bold shadow text-center";
-
-      if(aba !== 'pagar' && html5QrCode && html5QrCode.isScanning) html5QrCode.stop();
+      var url = window.location.href;
+      if (navigator.share) { navigator.share({ title: 'Crédito Canopus', text: 'Carteira Digital', url: url }).catch(function(){}); }
+      else { navigator.clipboard.writeText(url); alert("Link copiado!"); }
     }
 
     function iniciarCamera() {
       document.getElementById('reader-placeholder').classList.add('hidden');
       html5QrCode = new Html5Qrcode("reader");
-      html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 200 }, (text) => {
+      html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 200 }, function(text) {
         try { 
-          const d = JSON.parse(text); 
+          var d = JSON.parse(text); 
           if(d.loja && d.valor) { 
             html5QrCode.stop(); 
             abrirModalConfirmacao(d.loja, d.desc || 'Compra no Mercadinho', parseFloat(d.valor)); 
           } 
         } catch(e) {}
-      }, ()=>{});
+      }, function(){});
     }
 
     function abrirModalConfirmacao(loja, desc, valor) {
-      pendentePagamento = { loja, desc, valor };
+      pendentePagamento = { loja: loja, desc: desc, valor: valor };
       document.getElementById('modal-loja-nome').innerText = loja;
-      document.getElementById('modal-loja-valor').innerText = `R$ ${valor.toFixed(2).replace('.', ',')}`;
+      document.getElementById('modal-loja-valor').innerText = 'R$ ' + valor.toFixed(2).replace('.', ',');
       document.getElementById('modal-confirmar').classList.remove('hidden');
     }
 
@@ -265,115 +273,97 @@
 
     function confirmarDebito() {
       if(!pendentePagamento) return;
-      const user = dadosApp.usuarios[usuarioAtual];
-      if(user.saldo < pendentePagamento.valor) { 
-        alert("Saldo insuficiente!"); 
-        fecharModal(); 
-        return; 
-      }
+      var user = dadosApp.usuarios[usuarioAtual];
+      if(user.saldo < pendentePagamento.valor) { alert("Saldo insuficiente!"); fecharModal(); return; }
       user.saldo -= pendentePagamento.valor;
       user.historico.unshift({ tipo: 'saida', desc: pendentePagamento.desc || pendentePagamento.loja, valor: pendentePagamento.valor, data: new Date().toLocaleDateString('pt-BR') });
-      salvardb(); 
-      atualizarTela(); 
-      fecharModal(); 
-      alert("Pagamento realizado com sucesso!");
+      salvardb(); atualizarTela(); fecharModal(); alert("Pagamento realizado com sucesso!");
     }
 
-    /* GERAÇÃO E VERIFICAÇÃO AUTOMÁTICA DE PIX VIA MERCADO PAGO */
-    async function gerarPixAutomatico() {
-      const valor = parseFloat(document.getElementById('valor-recarga-pix').value);
-      if(!valor || valor <= 0) { alert("Digite um valor válido para recarga."); return; }
+    function gerarPixAutomatico() {
+      var valor = parseFloat(document.getElementById('valor-recarga-pix').value);
+      if(!valor || valor <= 0) { alert("Digite um valor válido."); return; }
 
-      document.getElementById('status-verificacao-pix').innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1 text-amber-400"></i> Gerando Pix...`;
+      document.getElementById('status-verificacao-pix').innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1 text-amber-400"></i> Gerando Pix...';
 
-      try {
-        const response = await fetch("https://api.mercadopago.com/v1/payments", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${MP_ACCESS_TOKEN}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            transaction_amount: valor,
-            description: `Recarga Crédito Canopus - ${usuarioAtual}`,
-            payment_method_id: "pix",
-            payer: { email: "cliente@canopus.com" }
-          })
-        });
-
-        const data = await response.json();
-
+      fetch("https://api.mercadopago.com/v1/payments", {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + MP_ACCESS_TOKEN,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          transaction_amount: valor,
+          description: "Recarga Crédito Canopus - " + usuarioAtual,
+          payment_method_id: "pix",
+          payer: { email: "cliente@canopus.com" }
+        })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
         if(data.id) {
-          const qrCodeBase64 = data.point_of_interaction.transaction_data.qr_code_base64;
+          var qrCodeBase64 = data.point_of_interaction.transaction_data.qr_code_base64;
           pixCopiaEColaAtual = data.point_of_interaction.transaction_data.qr_code;
 
-          const container = document.getElementById('qrcode-pix-dinamico');
-          container.innerHTML = `<img src="data:image/jpeg;base64,${qrCodeBase64}" class="w-40 h-40">`;
-          
+          document.getElementById('qrcode-pix-dinamico').innerHTML = '<img src="data:image/jpeg;base64,' + qrCodeBase64 + '" class="w-40 h-40">';
           document.getElementById('area-qr-pix-gerado').classList.remove('hidden');
-          document.getElementById('status-verificacao-pix').innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1 text-amber-400"></i> Aguardando pagamento no banco...`;
+          document.getElementById('status-verificacao-pix').innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1 text-amber-400"></i> Aguardando pagamento...';
 
           iniciarMonitoramentoPagamento(data.id, valor);
         } else {
-          alert("Erro ao gerar Pix. Verifique os dados.");
+          alert("Erro ao gerar Pix no Mercado Pago.");
         }
-      } catch(e) {
-        alert("Erro na conexão com Mercado Pago.");
-      }
+      })
+      .catch(function(err) { alert("Erro de conexão."); });
     }
 
     function iniciarMonitoramentoPagamento(paymentId, valor) {
       if(intervaloChecagemPix) clearInterval(intervaloChecagemPix);
 
-      intervaloChecagemPix = setInterval(async () => {
-        try {
-          const res = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
-            headers: { "Authorization": `Bearer ${MP_ACCESS_TOKEN}` }
-          });
-          const paymentData = await res.json();
-
+      intervaloChecagemPix = setInterval(function() {
+        fetch("https://api.mercadopago.com/v1/payments/" + paymentId, {
+          headers: { "Authorization": "Bearer " + MP_ACCESS_TOKEN }
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(paymentData) {
           if(paymentData.status === "approved") {
             clearInterval(intervaloChecagemPix);
-            
-            const user = dadosApp.usuarios[usuarioAtual];
+            var user = dadosApp.usuarios[usuarioAtual];
             user.saldo += valor;
             user.historico.unshift({ tipo: 'entrada', desc: 'Recarga Pix Automática', valor: valor, data: new Date().toLocaleDateString('pt-BR') });
             salvardb();
             atualizarTela();
-
             document.getElementById('area-qr-pix-gerado').classList.add('hidden');
             document.getElementById('valor-recarga-pix').value = "";
-            alert(`🎉 Pagamento Confirmado! R$ ${valor.toFixed(2)} adicionados automaticamente à carteira de ${usuarioAtual}.`);
+            alert("🎉 Pagamento Confirmado! R$ " + valor.toFixed(2) + " adicionados a " + usuarioAtual);
           }
-        } catch(e) {}
+        })
+        .catch(function(e) {});
       }, 3000);
     }
 
     function copiarPixCopiaECola() {
       if(!pixCopiaEColaAtual) return;
       navigator.clipboard.writeText(pixCopiaEColaAtual);
-      alert("Código Pix Copia e Cola copiado!");
+      alert("Código Pix copiado!");
     }
 
-    /* ÁREA DO DONO */
     function autenticarDono() {
-      const senha = document.getElementById('senha-dono-input').value;
+      var senha = document.getElementById('senha-dono-input').value;
       if(senha === "canopus123") {
         document.getElementById('painel-senha-dono').classList.add('hidden');
         document.getElementById('painel-acoes-dono').classList.remove('hidden');
-      } else {
-        alert("Senha incorreta!");
-      }
+      } else { alert("Senha incorreta!"); }
     }
 
     function gerarQrCodeCobranca() {
-      const valor = parseFloat(document.getElementById('valor-cobrativo').value);
+      var valor = parseFloat(document.getElementById('valor-cobrativo').value);
       if(!valor || valor <= 0) { alert("Informe o valor."); return; }
-      const payload = JSON.stringify({ loja: "Mercadinho Canopus", desc: document.getElementById('desc-cobrativo').value || 'Compra', valor: valor });
-      const container = document.getElementById('canvas-qr-cobranca');
+      var payload = JSON.stringify({ loja: "Mercadinho Canopus", desc: document.getElementById('desc-cobrativo').value || 'Compra', valor: valor });
+      var container = document.getElementById('canvas-qr-cobranca');
       container.innerHTML = "";
       new QRCode(container, { text: payload, width: 160, height: 160 });
-      document.getElementById('titulo-cobranca').innerText = `Mercadinho Canopus - R$ ${valor.toFixed(2)}`;
+      document.getElementById('titulo-cobranca').innerText = 'Mercadinho Canopus - R$ ' + valor.toFixed(2);
       document.getElementById('box-qr-cobranca').classList.remove('hidden');
     }
   </script>
