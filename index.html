@@ -38,13 +38,13 @@ input{width:100%;padding:14px;border-radius:12px;border:1px solid #1b5a47;backgr
 <div class="logo" onclick="cliqueDono()">🍃</div>
 <div onclick="cliqueDono()"><div class="tit">Crédito Canopus 🌿</div><div class="sub">Mercadinho Digital</div></div>
 </div>
-<div class="btnShare" onclick="window.open('https://wa.me/?text=Canopus: https://7-maker.github.io/Cr-dito-canopus/','_blank')">↗</div>
+<div class="btnShare" onclick="compartilhar()">↗</div>
 </div>
 
 <div class="card">
 <div style="color:#8ec9b3;font-size:11px" id="nomeTopo">SEU SALDO</div>
 <div id="saldoTopo" class="saldoGrande">R$ 0,00</div>
-<div style="color:#5ab99a;font-size:11px;margin-top:4px" id="infoTopo">Digite seu nome abaixo para ver</div>
+<div style="color:#5ab99a;font-size:11px;margin-top:4px" id="infoTopo">Digite seu nome abaixo</div>
 </div>
 
 <div class="tabs">
@@ -81,73 +81,7 @@ input{width:100%;padding:14px;border-radius:12px;border:1px solid #1b5a47;backgr
 </div>
 
 <script>
-let toques=0;
-let saldos=JSON.parse(localStorage.getItem('canopus_saldos')||localStorage.getItem('s')||'{}');
-let nomes=JSON.parse(localStorage.getItem('canopus_nomes')||localStorage.getItem('noms')||'{}');
-let pedidos=JSON.parse(localStorage.getItem('canopus_ped')||localStorage.getItem('ped')||'[]');
-let ultimoNome=localStorage.getItem('canopus_ultimo')||'';
-if(localStorage.getItem('canopus_dono')==='1') document.getElementById('tabDono').classList.add('ver');
+const MEU_LINK = "https://delmirenogomesdasilva27-maker.github.io/Cr-dito-canopus/";
 
-function cliqueDono(){
-  toques++;
-  if(toques>=5){
-    toques=0;
-    let s=prompt('Senha:');
-    if(s==='De@1mirene'){localStorage.setItem('canopus_dono','1');document.getElementById('tabDono').classList.add('ver');abrir(3);}
-  }
-}
-function abrir(n){ 
-  document.getElementById('a1').classList.remove('on');document.getElementById('a2').classList.remove('on');document.getElementById('a3').classList.remove('on');
-  document.getElementById('t1').classList.remove('ativo');document.getElementById('t2').classList.remove('ativo');document.getElementById('tabDono').classList.remove('ativo');
-  if(n===1){document.getElementById('a1').classList.add('on');document.getElementById('t1').classList.add('ativo')}
-  if(n===2){document.getElementById('a2').classList.add('on');document.getElementById('t2').classList.add('ativo')}
-  if(n===3){document.getElementById('a3').classList.add('on');document.getElementById('tabDono').classList.add('ativo')}
-}
-function esconder(){localStorage.setItem('canopus_dono','0');document.getElementById('tabDono').classList.remove('ver');abrir(1)}
-function salvar(){localStorage.setItem('canopus_saldos',JSON.stringify(saldos));localStorage.setItem('s',JSON.stringify(saldos));localStorage.setItem('canopus_nomes',JSON.stringify(nomes));localStorage.setItem('noms',JSON.stringify(nomes));localStorage.setItem('canopus_ped',JSON.stringify(pedidos));localStorage.setItem('ped',JSON.stringify(pedidos)); if(ultimoNome) localStorage.setItem('canopus_ultimo',ultimoNome);}
-
-function verSaldo(){
-  let nome=document.getElementById('nomePagar').value.trim();
-  if(nome){ ultimoNome=nome; localStorage.setItem('canopus_ultimo',nome); }
-  let c=(nome||ultimoNome).toLowerCase();
-  let box=document.getElementById('boxSaldo');
-  let topoNome=document.getElementById('nomeTopo');
-  let topoSaldo=document.getElementById('saldoTopo');
-  let info=document.getElementById('infoTopo');
-  
-  if(!c){ topoNome.innerText='SEU SALDO'; topoSaldo.innerText='R$ 0,00'; info.innerText='Digite seu nome abaixo'; box.style.display='none'; return; }
-  
-  let valor=saldos[c]||0;
-  topoNome.innerText=(nomes[c]||nome||ultimoNome).toUpperCase();
-  topoSaldo.innerText='R$ '+Number(valor).toFixed(2).replace('.',',');
-  info.innerText='Saldo disponível';
-  
-  if(nome){
-    if(saldos[c]!=null){ box.style.display='block'; box.innerText='Você tem R$ '+Number(valor).toFixed(2).replace('.',','); }
-    else{ box.style.display='block'; box.innerText='Você ainda não tem crédito'; }
-  }
-}
-
-function pagar(){
-  let nome=document.getElementById('nomePagar').value.trim()||ultimoNome; let c=nome.toLowerCase(); let v=parseFloat(document.getElementById('valorPagar').value);
-  if(!nome||!v){alert('Digite seu nome e o valor');return;}
-  if(saldos[c]==null){alert('Você ainda não tem crédito');return;}
-  if(saldos[c]<v){alert('Você tem só R$ '+saldos[c].toFixed(2));return;}
-  saldos[c]-=v; document.getElementById('msgPagar').innerText='✅ Pago R$ '+v.toFixed(2)+' - Saldo R$ '+saldos[c].toFixed(2); salvar(); verSaldo(); atualizarLista();
-}
-function liberar(){let o=document.getElementById('nomeLib').value.trim(); let v=parseFloat(document.getElementById('valorLib').value); if(!o||!v){alert('Digite');return;} let c=o.toLowerCase(); saldos[c]=(saldos[c]||0)+v; nomes[c]=o; salvar(); atualizarLista(); verSaldo();}
-function pedir(){let o=document.getElementById('nomeRec').value.trim(); let v=parseFloat(document.getElementById('valorRec').value); if(!o||!v){alert('Digite');return;} pedidos.push({nome:o,valor:v,status:'pendente'}); document.getElementById('msgRec').innerText='Pedido salvo! Pague no Mercado Pago'; salvar(); atualizarLista();}
-function aprovar(i){let p=pedidos[i];let c=p.nome.toLowerCase();saldos[c]=(saldos[c]||0)+p.valor;nomes[c]=p.nome;p.status='aprovado';salvar();atualizarLista();verSaldo();}
-function rejeitar(i){pedidos.splice(i,1);salvar();atualizarLista();}
-function atualizarLista(){
-  let l=document.getElementById('listaSaldos'); l.innerHTML=''; for(let k in saldos){ l.innerHTML+=(nomes[k]||k)+': R$ '+Number(saldos[k]).toFixed(2)+'<br>'; }
-  let lp=document.getElementById('listaPed'); lp.innerHTML=''; let tem=false; for(let i=0;i<pedidos.length;i++){if(pedidos[i].status==='pendente'){tem=true; lp.innerHTML+=`<div class="pend"><b>${pedidos[i].nome}</b> - R$ ${pedidos[i].valor}<button class="btn btnVerde" onclick="aprovar(${i})">Aprovar</button><button class="btn btnVermelho" onclick="rejeitar(${i})">Rejeitar</button></div>`}} if(!tem) lp.innerHTML='<small>Sem pedidos</small>';
-}
-
-// AO ABRIR JÁ MOSTRA O SALDO - IGUAL BANCO
-if(ultimoNome){ document.getElementById('nomePagar').value=ultimoNome; }
-verSaldo();
-atualizarLista();
-</script>
-</body>
-</html>
+function compartilhar(){
+  window.open('https://wa.me/?text=Olha o
