@@ -1,24 +1,14 @@
-<!DOCTYPE html><html lang=pt-BR><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Canopus</title><style>body{background:#001f17;color:#fff;font-family:sans-serif;max-width:400px;margin:auto;padding:10px}button{width:100%;padding:12px;border-radius:10px;border:none;font-weight:bold;margin-top:6px}input{width:100%;padding:12px;border-radius:10px;border:1px solid #0a5; background:#003322;color:#fff;margin-top:6px;box-sizing:border-box}.card{background:#002e22;padding:12px;border-radius:12px;margin-top:10px;border:1px solid #0a5}.tab{display:flex;gap:4px}.tab button{font-size:12px}</style></head><body>
-<h3 style=text-align:center>🌿 Crédito Canopus</h3>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name=viewport content="width=device-width,initial-scale=1"><title>Canopus FIX</title><style>body{background:#001f17;color:#fff;font-family:sans-serif;max-width:400px;margin:auto;padding:10px}button{width:100%;padding:14px;border-radius:12px;border:none;font-weight:bold;margin-top:8px;font-size:15px}input{width:100%;padding:14px;border-radius:12px;border:1px solid #10b981;background:#003322;color:#fff;margin-top:8px;box-sizing:border-box}.card{background:#002e22;padding:14px;border-radius:14px;margin-top:12px;border:1px solid #065f46}.tab{display:flex;gap:6px}</style></head><body>
+<h3 style=text-align:center>🌿 Crédito Canopus FIX</h3>
 <div class=card>Saldo: R$ <span id=saldo>0,00</span> <small id=nome></small></div>
-<div class="tab card" style=padding:6px>
-<button id=b1 onclick="ver(1)" style=background:#10b981>1 Pagar</button>
-<button id=b2 onclick="ver(2)">2 Recarregar</button>
-<button id=b3 onclick="ver(3)" style=background:#fbbf24;color:#000>3 Dono</button>
-</div>
-
-<div id=a1 class=card><b>1. Escanear QR do mercadinho</b><div id=reader style=width:100%;margin-top:8px></div><button onclick="cam()" style=background:#10b981>📷 Ligar Câmera</button><p id=msg1 style=font-size:12px></p></div>
-
-<div id=a2 class=card style=display:none><b>2. Comprar Crédito</b><p style=font-size:12px>Link com valor livre</p><a href="https://link.mercadopago.com.br/dolarcanopus" target=_blank><button style=background:#0ea5e9;color:#fff>💳 Pagar Mercado Pago</button></a><p style=font-size:11px;margin-top:8px>Peça pro pai colocar NOME do filho na descrição e te mandar o comprovante no Zap</p></div>
-
-<div id=a3 class=card style=display:none><b style=color:#fbbf24>3. Área do Dono - Liberar</b><input id=n placeholder="nome ex: joaozinho"><input id=v type=number placeholder="valor do comprovante ex: 20"><button onclick="lib()" style=background:#fbbf24;color:#000>✅ Liberar Crédito</button><p id=msg3 style=font-size:12px;font-weight:bold></p><hr><div style=font-size:12px id=lista></div><button onclick="if(confirm('apagar tudo?')){localStorage.clear();location.reload()}" style=background:#000;font-size:10px;color:#f88>apagar tudo</button></div>
-
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<div class="tab card"><button id=bb1 onclick="ver(1)" style=background:#10b981>1 Pagar</button><button id=bb2 onclick="ver(2)" style=background:#fff;color:#000>2 Recarregar</button><button id=bb3 onclick="ver(3)" style=background:#fbbf24;color:#000>3 Dono</button></div>
+<div id=a1 class=card><b>1. Escanear QR</b><p id=m1 style=font-size:13px>QR do mercadinho aqui</p><button onclick="alert('QR vai aqui depois, primeiro testa o Dono')" style=background:#10b981>📷 Câmera</button></div>
+<div id=a2 class=card style=display:none><b>2. Comprar Crédito</b><a href="https://link.mercadopago.com.br/dolarcanopus" target=_blank><button style=background:#0ea5e9;color:#fff>💳 Pagar Mercado Pago</button></a><p style=font-size:12px;margin-top:8px>Peça pro pai mandar comprovante no Zap com nome do filho</p></div>
+<div id=a3 class=card style=display:none><b style=color:#fbbf24>3. DONO - Liberar</b><input id=nn placeholder="nome ex: joaozinho"><input id=vv type=number placeholder="valor ex: 20"><button onclick="lib()" style=background:#fbbf24;color:#000>✅ LIBERAR AGORA</button><p id=m3 style=font-size:13px;color:#fbbf24></p><div id=lista style=font-size:12px;margin-top:10px></div></div>
 <script>
-let saldos=JSON.parse(localStorage.getItem('s')||'{}'),sal=parseFloat(localStorage.getItem('sal')||0),tit=localStorage.getItem('tit')||'',qr;
-function upd(){document.getElementById('saldo').innerText=sal.toFixed(2).replace('.',',');document.getElementById('nome').innerText=tit?' - '+tit:'';let l=document.getElementById('lista');l.innerHTML='';for(let k in saldos){l.innerHTML+=k+': R$ '+saldos[k]+'<br>'} }
-function ver(n){for(let i=1;i<=3;i++){document.getElementById('a'+i).style.display=n==i?'block':'none'}} 
-function lib(){let n=document.getElementById('n').value.trim().toLowerCase(),v=parseFloat(document.getElementById('v').value);if(!n||!v)return; saldos[n]=(saldos[n]||0)+v;localStorage.setItem('s',JSON.stringify(saldos));if(tit.toLowerCase()==n){sal=saldos[n];localStorage.setItem('sal',sal)}document.getElementById('msg3').innerText='Liberado R$ '+v+' pra '+n;document.getElementById('n').value='';document.getElementById('v').value='';upd()}
-function cam(){qr=new Html5Qrcode('reader');qr.start({facingMode:'environment'},{fps:10,qrbox:200},d=>{try{let j=JSON.parse(d);let n=(j.nome||'').toLowerCase(),vv=parseFloat(j.valor||0);if(saldos[n]>=vv){saldos[n]-=vv;sal=saldos[n];tit=n;localStorage.setItem('s',JSON.stringify(saldos));localStorage.setItem('sal',sal);localStorage.setItem('tit',tit);document.getElementById('msg1').innerText='Pagou R$ '+vv+' - '+n;upd();qr.stop()}else{document.getElementById('msg1').innerText='Saldo insuficiente: '+n}}catch(e){document.getElementById('msg1').innerText='QR: '+d}},e=>{})}
+let saldos={};try{saldos=JSON.parse(localStorage.getItem('s')||'{}')}catch(e){};let tit=localStorage.getItem('tit')||'';
+function upd(){let tot=0;for(let k in saldos){tot+=saldos[k]}document.getElementById('saldo').innerText=tot.toFixed(2).replace('.',',');document.getElementById('nome').innerText=tit?' - '+tit:'';let l=document.getElementById('lista');l.innerHTML='Saldos:<br>';for(let k in saldos){l.innerHTML+=k+': R$ '+saldos[k]+'<br>'}}
+function ver(n){document.getElementById('a1').style.display=n==1?'block':'none';document.getElementById('a2').style.display=n==2?'block':'none';document.getElementById('a3').style.display=n==3?'block':'none';}
+function lib(){let n=document.getElementById('nn').value.trim().toLowerCase();let v=parseFloat(document.getElementById('vv').value);if(!n){alert('digita o nome');return}if(!v){alert('digita o valor');return}saldos[n]=(saldos[n]||0)+v;localStorage.setItem('s',JSON.stringify(saldos));document.getElementById('m3').innerText='✅ Liberado R$ '+v+' pra '+n+'!';document.getElementById('nn').value='';document.getElementById('vv').value='';upd();ver(1);}
 upd();ver(1);
 </script></body></html>
