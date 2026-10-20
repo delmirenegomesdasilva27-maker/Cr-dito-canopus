@@ -3,28 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Canopus</title>
+<title>Credito Canopus</title>
 <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
 <style>
-*{font-family:'Patrick Hand',cursive;font-size:18px}
-body{background:#001a12;color:#fff;max-width:400px;margin:auto;padding:12px}
-.card{background:#022c1f;border:2px solid #0a7a5a;border-radius:18px;padding:14px;margin-top:14px}
-.btn{width:100%;padding:15px;border-radius:14px;border:none;font-weight:700;margin-top:10px}
-input{width:100%;padding:13px;border-radius:12px;border:1.5px solid #0a7a5a;background:#001a12;color:#fff;margin-top:8px;box-sizing:border-box}
+*{font-family:'Patrick Hand',cursive;font-size:18px;box-sizing:border-box}
+body{background:#001a12;color:#fff;max-width:420px;margin:auto;padding:12px}
+.card{background:#022c1f;border:2px solid #0a7a5a;border-radius:18px;padding:14px;margin-top:12px}
+.btn{width:100%;padding:14px;border-radius:14px;border:none;font-weight:700;margin-top:8px;cursor:pointer}
+input{width:100%;padding:12px;border-radius:12px;border:1.5px solid #0a7a5a;background:#001a12;color:#fff;margin-top:8px}
+#qrcode{background:#fff;padding:10px;border-radius:12px;text-align:center;margin-top:10px;display:none}
+#qrcode img{width:180px;height:180px}
 </style>
 </head>
 <body>
 <h2 style=text-align:center>🌿 Credito Canopus</h2>
 
-<div class=card>
-Saldo Total: R$ <span id=sg>0,00</span>
-<div id=lg style=color:#6ee7b7;font-weight:700;margin-top:5px"></div>
-</div>
+<div class=card>Saldo Total: R$ <span id=sg>0,00</span><div id=lg style=color:#6ee7b7;font-weight:700;margin-top:6px"></div></div>
 
 <div class=card>
 Nome da crianca
-<input id=nomeLogin placeholder="Ex: Nanda">
-<button class=btn style=background:#fff;color:#000 onclick="entrar()">Entrar</button>
+<input id=nLogin placeholder="Ex: Nanda">
+<button class=btn style=background:#fff;color:#000 onclick="entrar()">✅ Entrar</button>
 </div>
 
 <div class=card>
@@ -36,112 +35,88 @@ Nome da crianca
 <div id=a1 class=card>
 <b style=color:#10b981>1. Pagar no Mercadinho</b><br><br>
 <input id=vp type=number placeholder="Valor ex: 5">
-<button class=btn style=background:#10b981;color:#000 onclick="alert('QR R$ '+document.getElementById('vp').value)">Gerar QR Code</button>
-<hr style=margin:12px 0;border-color:#0a7a5a>
+<button class=btn style=background:#10b981;color:#000 onclick="gerarQR()">Gerar QR Code</button>
+<div id=qrcode><img id=imgQR src=""><p id=txtQR style=color:#000;margin:5px 0 0 0"></p></div>
+<hr style=border-color:#0a5a44;margin:12px 0>
 <input id=nd placeholder="Nome ex: Nanda">
 <input id=vd type=number placeholder="Valor ex: 5">
 <button class=btn style=background:#ef4444;color:#fff onclick="descontar()">Descontar do saldo</button>
-<p id=msg1 style=color:#6ee7b7;text-align:center"></p>
+<p id=msg1 style=text-align:center;color:#6ee7b7"></p>
 </div>
 
 <div id=a2 class=card style=display:none>
 <b style=color:#10b981>2. Recarregar</b><br><br>
-<input id=nomeRec placeholder="Seu nome">
-<input id=valorRec type=number placeholder="Valor ex: 20">
+<input id=nRec placeholder="Seu nome normal">
+<input id=vRec type=number placeholder="Valor ex: 20">
 <button class=btn style=background:#fbbf24;color:#000 onclick="preparar()">Salvar</button>
-<p id=msg2 style=color:#fbbf24;text-align:center"></p>
+<p id=msg2 style=text-align:center;color:#fbbf24"></p>
 <a id=linkMp href="https://link.mercadopago.com.br/dolarcanopus" target=_blank style=display:none;text-decoration:none>
 <button class=btn style=background:#009ee3;color:#fff">🛒 Recarga no Mercado Pago</button>
 </a>
 </div>
 
 <div id=a3 class=card style=display:none>
-<b style=color:#fbbf24>3. Area do Dono</b><br><br>
-<input id=nn placeholder="Nome">
-<input id=vv type=number placeholder="Valor">
+<b style=color:#fbbf24>3. Area do Dono - Liberar</b><br><br>
+<input id=nn placeholder="Nome normal ex: Nanda">
+<input id=vv type=number placeholder="Valor ex: 20">
 <button class=btn style=background:#fbbf24;color:#000 onclick="liberar()">Liberar Credito</button>
-<p id=m3 style=color:#fbbf24;text-align:center"></p>
-<div id=lista style=margin-top:10px;line-height:28px"></div>
-<button class=btn style=background:#000;color:#888;border:1px solid #333" onclick="localStorage.clear();location.reload()">Apagar tudo</button>
+<p id=m3 style=text-align:center;color:#fbbf24"></p>
+<div id=lista style=line-height:28px;margin-top:10px"></div>
+<button class=btn style=background:#000;color:#666;border:1px solid #333;font-size:14px" onclick="if(confirm('Apagar tudo?')){localStorage.clear();location.reload()}">Apagar tudo</button>
 </div>
 
 <script>
-var saldos = {};
-var nomes = {};
-try{ saldos = JSON.parse(localStorage.getItem('s') || '{}'); }catch(e){}
-try{ nomes = JSON.parse(localStorage.getItem('noms') || '{}'); }catch(e){}
-var atual = localStorage.getItem('tit') || '';
+var saldos={};try{saldos=JSON.parse(localStorage.getItem('s')||'{}')}catch(e){}
+var nomes={};try{nomes=JSON.parse(localStorage.getItem('noms')||'{}')}catch(e){}
+var atual=localStorage.getItem('tit')||'';
 
 function upd(){
-  var t=0; for(var k in saldos) t+=saldos[k];
-  document.getElementById('sg').innerText = t.toFixed(2);
-  if(atual){
-    var nomeMostra = nomes[atual] || atual;
-    document.getElementById('lg').innerText = nomeMostra + ' - R$ ' + (saldos[atual]||0).toFixed(2);
-  }
-  var l = document.getElementById('lista');
-  l.innerHTML = '';
-  for(var k in saldos){
-    l.innerHTML += (nomes[k]||k) + ': R$ ' + saldos[k].toFixed(2) + '<br>';
-  }
-  localStorage.setItem('s', JSON.stringify(saldos));
-  localStorage.setItem('noms', JSON.stringify(nomes));
+ var t=0;for(var k in saldos)t+=saldos[k];
+ document.getElementById('sg').innerText=t.toFixed(2);
+ if(atual)document.getElementById('lg').innerText=(nomes[atual]||atual)+' - R$ '+(saldos[atual]||0).toFixed(2);
+ var l=document.getElementById('lista');l.innerHTML='';for(var k in saldos)l.innerHTML+=(nomes[k]||k)+': R$ '+saldos[k].toFixed(2)+'<br>';
+ localStorage.setItem('s',JSON.stringify(saldos));
+ localStorage.setItem('noms',JSON.stringify(nomes));
 }
-
 function entrar(){
-  var orig = document.getElementById('nomeLogin').value.trim();
-  if(!orig){ alert('Digite seu nome'); return; }
-  var chave = orig.toLowerCase();
-  atual = chave;
-  nomes[chave] = orig;
-  localStorage.setItem('tit', chave);
-  upd();
-  ver(1);
+ var o=document.getElementById('nLogin').value.trim();if(!o){alert('Digite nome');return}
+ var c=o.toLowerCase();atual=c;nomes[c]=o;localStorage.setItem('tit',c);upd();ver(1);
 }
-
 function ver(n){
-  document.getElementById('a1').style.display = n==1?'block':'none';
-  document.getElementById('a2').style.display = n==2?'block':'none';
-  document.getElementById('a3').style.display = n==3?'block':'none';
+ document.getElementById('a1').style.display=n==1?'block':'none';
+ document.getElementById('a2').style.display=n==2?'block':'none';
+ document.getElementById('a3').style.display=n==3?'block':'none';
 }
-
+function gerarQR(){
+ var v=document.getElementById('vp').value;if(!v){alert('Digite valor');return}
+ document.getElementById('imgQR').src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Canopus-R$'+v;
+ document.getElementById('txtQR').innerText='R$ '+v;
+ document.getElementById('qrcode').style.display='block';
+}
 function liberar(){
-  var orig = document.getElementById('nn').value.trim();
-  var v = parseFloat(document.getElementById('vv').value);
-  if(!orig || !v){ alert('Nome e valor'); return; }
-  var chave = orig.toLowerCase();
-  saldos[chave] = (saldos[chave]||0) + v;
-  nomes[chave] = orig;
-  document.getElementById('m3').innerText = 'Liberado R$ ' + v + ' pra ' + orig;
-  document.getElementById('nn').value = '';
-  document.getElementById('vv').value = '';
-  upd();
+ var o=document.getElementById('nn').value.trim();var v=parseFloat(document.getElementById('vv').value);
+ if(!o||!v){alert('Nome e valor');return}
+ var c=o.toLowerCase();saldos[c]=(saldos[c]||0)+v;nomes[c]=o;
+ document.getElementById('m3').innerText='Liberado R$ '+v+' pra '+o;
+ document.getElementById('nn').value='';document.getElementById('vv').value='';upd();
 }
-
 function preparar(){
-  var orig = document.getElementById('nomeRec').value.trim();
-  var v = parseFloat(document.getElementById('valorRec').value);
-  if(!orig || !v){ alert('Nome e valor'); return; }
-  document.getElementById('msg2').innerText = 'Salvo: ' + orig + ' R$ ' + v + ' - Agora clique no carrinho abaixo';
-  document.getElementById('linkMp').style.display = 'block';
+ var o=document.getElementById('nRec').value.trim();var v=parseFloat(document.getElementById('vRec').value);
+ if(!o||!v){alert('Nome e valor');return}
+ document.getElementById('msg2').innerText='Salvo: '+o+' R$ '+v+' - Clique no carrinho';
+ document.getElementById('linkMp').style.display='block';
 }
-
 function descontar(){
-  var orig = document.getElementById('nd').value.trim();
-  if(!orig) orig = nomes[atual] || atual;
-  if(!orig){ alert('Digite nome'); return; }
-  var chave = orig.toLowerCase();
-  var v = parseFloat(document.getElementById('vd').value);
-  if(!v){ alert('Digite valor'); return; }
-  if((saldos[chave]||0) < v){ alert('Sem saldo! Saldo: ' + (saldos[chave]||0)); return; }
-  saldos[chave] -= v;
-  upd();
-  document.getElementById('msg1').innerText = 'Descontado R$ ' + v + ' de ' + (nomes[chave]||orig);
-  document.getElementById('vd').value = '';
+ var o=document.getElementById('nd').value.trim()||nomes[atual]||atual;
+ if(!o){alert('Digite nome');return}
+ var c=o.toLowerCase();var v=parseFloat(document.getElementById('vd').value);
+ if(!v){alert('Valor');return}
+ if((saldos[c]||0)<v){alert('Sem saldo! Tem R$ '+(saldos[c]||0));return}
+ saldos[c]-=v;upd();
+ document.getElementById('msg1').innerText='Descontado R$ '+v+' de '+(nomes[c]||o);
+ document.getElementById('vd').value='';
 }
-
-upd();
-ver(1);
+upd();ver(1);
 </script>
 </body>
 </html>
