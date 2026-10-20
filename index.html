@@ -7,23 +7,22 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
 body{background:#011611;color:#fff}
-.topo{background:#05261e;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #0e3a2d}
+.topo{background:#05261e;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
 .logo{width:56px;height:56px;background:#2a9d5c;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px}
 .tit{font-size:20px;font-weight:800;cursor:pointer;user-select:none}
 .sub{color:#5ab99a;font-size:14px}
-.btnShare{width:44px;height:44px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.btnShare{width:44px;height:44px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:12px;display:flex;align-items:center;justify-content:center}
 .card{margin:14px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:16px;padding:14px;display:flex;justify-content:space-between}
 .tabs{margin:14px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:16px;padding:5px;display:flex;gap:4px}
-.tab{flex:1;padding:12px 4px;text-align:center;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;color:#5ab99a}
+.tab{flex:1;padding:12px 4px;text-align:center;border-radius:12px;font-weight:700;color:#5ab99a;cursor:pointer}
 .tab.ativo{background:#193d32;color:#fff}
 #tabDono{display:none;color:#facc15;background:#193d32}
 #tabDono.ver{display:block}
-#tabDono.ativo{color:#000;background:#facc15}
 .aba{margin:14px;background:#0e3a2d;border:1px solid #1b5a47;border-radius:20px;padding:18px;display:none}
 .aba.on{display:block}
 .abaDono{border-color:#facc15 !important}
 input{width:100%;padding:14px;border-radius:12px;border:1px solid #1b5a47;background:#011611;color:#fff;margin-top:10px;font-size:16px}
-.btn{width:100%;padding:14px;border-radius:12px;border:none;font-weight:800;margin-top:10px;cursor:pointer;display:block;font-size:16px}
+.btn{width:100%;padding:14px;border-radius:12px;border:none;font-weight:800;margin-top:10px;display:block;font-size:16px;cursor:pointer}
 .btnAmarelo{background:#facc15;color:#000}
 .btnVerde{background:#10e0a0;color:#00261c}
 .btnVermelho{background:#ef4444;color:#fff}
@@ -34,17 +33,11 @@ input{width:100%;padding:14px;border-radius:12px;border:1px solid #1b5a47;backgr
 <body>
 
 <div class="topo">
-<div style="display:flex;gap:12px;align-items:center">
-<div class="logo">🍃</div>
-<div><div class="tit" id="tituloApp">Crédito Canopus 🌿</div><div class="sub">Mercadinho Digital</div></div>
-</div>
+<div style="display:flex;gap:12px;align-items:center"><div class="logo">🍃</div><div><div class="tit" id="tituloApp">Crédito Canopus 🌿</div><div class="sub">Mercadinho Digital - Toque 5x no título</div></div></div>
 <div class="btnShare" onclick="compartilhar()">↗</div>
 </div>
 
-<div class="card">
-<span style="color:#8ec9b3">Titular: <b style="color:#fff">Mirene</b></span>
-<span style="color:#6ee7b7">✅ Conta Ativa</span>
-</div>
+<div class="card"><span>Titular: <b>Mirene</b></span><span>✅ Ativa</span></div>
 
 <div class="tabs">
 <div id="t1" class="tab ativo" onclick="abrir(1)">1. Pagar</div>
@@ -52,179 +45,137 @@ input{width:100%;padding:14px;border-radius:12px;border:1px solid #1b5a47;backgr
 <div id="tabDono" class="tab" onclick="abrir(3)">3. ÁREA DO DONO</div>
 </div>
 
-<!-- ABA 1 PAGAR -->
 <div id="a1" class="aba on" style="text-align:center">
-<b style="font-size:18px">Escanear QR Code do Mercadinho</b>
-<p style="color:#5ab99a;font-size:13px;margin-top:6px">Aponte a câmera para o QR Code no balcão</p>
-<div style="margin:12px 0;background:#010a08;border-radius:18px;height:200px;display:flex;align-items:center;justify-content:center;color:#3a9a7f">⊞ Câmera</div>
-<button class="btn btnVerde">📷 Ativar Câmera</button>
+<b>PAGAR - TESTE AQUI</b>
+<p style="color:#5ab99a;font-size:12px;margin:6px 0">Se não tiver saldo, clique em Adicionar Teste</p>
+<button class="btn btnAmarelo" onclick="adicionarTeste()">+ Adicionar R$50 para Teste</button>
+<hr style="margin:12px 0;border-color:#333">
 <input id="nomePagar" placeholder="Nome do cliente">
 <input id="valorPagar" type="number" placeholder="Valor a descontar">
 <button class="btn btnVermelho" onclick="descontar()">Descontar do Saldo</button>
-<p id="msgPagar" style="color:#6ee7b7;margin-top:8px"></p>
+<p id="msgPagar" style="color:#6ee7b7;margin-top:10px;font-weight:800;font-size:16px"></p>
+<div id="listaSaldosPagar" style="margin-top:10px;line-height:28px;text-align:left"></div>
 </div>
 
-<!-- ABA 2 COMPRAR CREDITO -->
 <div id="a2" class="aba" style="text-align:center">
 <b>Comprar Crédito</b>
-<p style="color:#5ab99a;margin:8px 0">Seu link oficial já configurado</p>
-<input id="nomeRecarga" placeholder="Seu nome completo">
-<input id="valorRecarga" type="number" placeholder="Valor ex: 20">
-<button class="btn btnAmarelo" onclick="salvarPedido()">1️⃣ Salvar Pedido</button>
+<input id="nomeRecarga" placeholder="Seu nome"><input id="valorRecarga" type="number" placeholder="Valor">
+<button class="btn btnAmarelo" onclick="salvarPedido()">Salvar Pedido</button>
 <p id="msgRecarga" style="color:#facc15;margin-top:8px"></p>
-<a href="https://link.mercadopago.com.br/dolarcanopus" target="_blank" class="btn btnAzul" style="margin-top:12px">2️⃣ 🛒 Pagar no Mercado Pago</a>
-<p style="color:#5ab99a;font-size:12px;margin-top:8px">Após pagar, a Dona libera seu crédito</p>
+<a href="https://link.mercadopago.com.br/dolarcanopus" target="_blank" class="btn btnAzul" style="margin-top:12px">🛒 Pagar no Mercado Pago</a>
 </div>
 
-<!-- ABA 3 DONO -->
 <div id="a3" class="aba abaDono">
-<div style="text-align:center"><b style="color:#facc15;font-size:18px">🔒 Área do Dono</b><p style="color:#5ab99a">Logada como Dona Mirene</p></div>
-
-<div style="margin-top:14px">
-<b>📋 Pedidos Pendentes:</b>
-<div id="listaPendentes"></div>
-</div>
-
-<hr style="border-color:#1b5a47;margin:14px 0">
-
-<b>Liberar crédito direto:</b>
-<input id="nomeLiberar" placeholder="Nome do cliente">
-<input id="valorLiberar" type="number" placeholder="Valor">
-<button class="btn btnAmarelo" onclick="liberarDireto()">Liberar Direto</button>
-<p id="msgLiberar" style="color:#facc15;text-align:center;margin-top:6px"></p>
-
-<hr style="border-color:#1b5a47;margin:14px 0">
-
-<b>💰 Todos os Saldos:</b>
-<div id="listaSaldos" style="margin-top:6px;line-height:28px"></div>
-
-<button class="btn" style="background:#000;color:#666;border:1px solid #333;margin-top:18px" onclick="esconderDono()">Esconder Dono</button>
+<div style="text-align:center"><b style="color:#facc15;font-size:18px">🔒 Área do Dono</b></div>
+<b style="display:block;margin-top:12px">📋 Pedidos:</b><div id="listaPendentes"></div>
+<hr style="margin:12px 0;border-color:#333">
+<b>Liberar:</b><input id="nomeLiberar" placeholder="Nome"><input id="valorLiberar" type="number" placeholder="Valor">
+<button class="btn btnAmarelo" onclick="liberarDireto()">Liberar Direto</button><p id="msgLiberar" style="color:#facc15;text-align:center"></p>
+<hr style="margin:12px 0;border-color:#333">
+<b>💰 Saldos:</b><div id="listaSaldos" style="margin-top:6px"></div>
+<button class="btn btnAmarelo" style="margin-top:16px" onclick="esconderDono()">Esconder Dono</button>
 </div>
 
 <script>
 let toques=0;
-let saldos={}; try{saldos=JSON.parse(localStorage.getItem('canopus_saldos')||'{}')}catch(e){saldos={}}
-let nomes={}; try{nomes=JSON.parse(localStorage.getItem('canopus_nomes')||'{}')}catch(e){nomes={}}
-let pedidos=[]; try{pedidos=JSON.parse(localStorage.getItem('canopus_ped')||'[]')}catch(e){pedidos=[]}
+let saldos={};
+let nomes={};
+let pedidos=[];
+
+// MIGRAÇÃO - Pega tanto formato antigo quanto novo
+try{
+  let s1=JSON.parse(localStorage.getItem('s')||'null');
+  let s2=JSON.parse(localStorage.getItem('canopus_saldos')||'null');
+  if(s1) saldos=s1;
+  if(s2) saldos={...saldos,...s2};
+} catch(e){}
+try{
+  let n1=JSON.parse(localStorage.getItem('noms')||'null');
+  let n2=JSON.parse(localStorage.getItem('canopus_nomes')||'null');
+  if(n1) nomes=n1;
+  if(n2) nomes={...nomes,...n2};
+} catch(e){}
+try{
+  let p1=JSON.parse(localStorage.getItem('ped')||'null');
+  let p2=JSON.parse(localStorage.getItem('canopus_ped')||'null');
+  if(p1) pedidos=p1;
+  if(p2&&p2.length>0) pedidos=p2;
+} catch(e){}
+
 const SENHA="De@1mirene";
+if(localStorage.getItem('canopus_dono')==='1' || localStorage.getItem('donoLog')==='1') document.getElementById('tabDono').classList.add('ver');
 
-// Se já logou antes, mostra o botão
-if(localStorage.getItem('canopus_dono')==='1'){
-  document.getElementById('tabDono').classList.add('ver');
-}
-
-// 5 TOQUES NO NOME DO APP
 document.getElementById('tituloApp').addEventListener('click',function(){
-  toques++;
-  if(toques>=5){
-    toques=0;
-    let s=prompt('Senha da Dona:');
-    if(s===SENHA){
-      localStorage.setItem('canopus_dono','1');
-      document.getElementById('tabDono').classList.add('ver');
-      abrir(3);
-      alert('Liberado! Área do Dono ativada');
-    } else if(s){ alert('Senha errada'); }
-  }
-  setTimeout(()=>{toques=0},3000);
+  toques++; if(toques>=5){toques=0; let s=prompt('Senha da Dona:'); if(s===SENHA){localStorage.setItem('canopus_dono','1');document.getElementById('tabDono').classList.add('ver');abrir(3);alert('Dono liberado!')}else if(s)alert('Senha errada')}}
 });
 
-function compartilhar(){
-  let url="https://7-maker.github.io/Cr-dito-canopus/";
-  window.open('https://wa.me/?text='+encodeURIComponent('🌿 Crédito Canopus - Mercadinho Digital: '+url),'_blank');
-}
-
+function compartilhar(){window.open('https://wa.me/?text='+encodeURIComponent('Canopus: https://7-maker.github.io/Cr-dito-canopus/'),'_blank')}
 function abrir(n){
-  document.getElementById('a1').classList.remove('on');
-  document.getElementById('a2').classList.remove('on');
-  document.getElementById('a3').classList.remove('on');
-  document.getElementById('t1').classList.remove('ativo');
-  document.getElementById('t2').classList.remove('ativo');
-  document.getElementById('tabDono').classList.remove('ativo');
+  document.getElementById('a1').classList.remove('on');document.getElementById('a2').classList.remove('on');document.getElementById('a3').classList.remove('on');
+  document.getElementById('t1').classList.remove('ativo');document.getElementById('t2').classList.remove('ativo');document.getElementById('tabDono').classList.remove('ativo');
   if(n===1){document.getElementById('a1').classList.add('on');document.getElementById('t1').classList.add('ativo')}
   if(n===2){document.getElementById('a2').classList.add('on');document.getElementById('t2').classList.add('ativo')}
   if(n===3){document.getElementById('a3').classList.add('on');document.getElementById('tabDono').classList.add('ativo')}
 }
-
-function esconderDono(){
-  localStorage.setItem('canopus_dono','0');
-  document.getElementById('tabDono').classList.remove('ver');
-  abrir(1);
-}
-
-function atualizarTudo(){
-  let l=document.getElementById('listaSaldos'); l.innerHTML='';
-  for(let k in saldos){ l.innerHTML+=(nomes[k]||k)+': R$ '+Number(saldos[k]).toFixed(2)+'<br>' }
-  if(Object.keys(saldos).length===0) l.innerHTML='<small style=color:#666>Nenhum saldo ainda</small>';
-
-  let lp=document.getElementById('listaPendentes'); lp.innerHTML='';
-  let tem=false;
-  for(let i=0;i<pedidos.length;i++){
-    if(pedidos[i].status==='pendente'){
-      tem=true;
-      lp.innerHTML+=`<div class="pend"><b>${pedidos[i].nome}</b> - R$ ${pedidos[i].valor}
-      <button class="btn btnVerde" onclick="aprovar(${i})">✅ Aprovar</button>
-      <button class="btn btnVermelho" onclick="rejeitar(${i})">❌ Rejeitar</button>
-      </div>`;
-    }
-  }
-  if(!tem) lp.innerHTML='<small style=color:#666>Sem pedidos pendentes</small>';
-
+function esconderDono(){localStorage.setItem('canopus_dono','0');document.getElementById('tabDono').classList.remove('ver');abrir(1)}
+function salvar(){
   localStorage.setItem('canopus_saldos',JSON.stringify(saldos));
+  localStorage.setItem('s',JSON.stringify(saldos));
   localStorage.setItem('canopus_nomes',JSON.stringify(nomes));
+  localStorage.setItem('noms',JSON.stringify(nomes));
   localStorage.setItem('canopus_ped',JSON.stringify(pedidos));
+  localStorage.setItem('ped',JSON.stringify(pedidos));
 }
-
-function liberarDireto(){
-  let o=document.getElementById('nomeLiberar').value.trim();
-  let v=parseFloat(document.getElementById('valorLiberar').value);
-  if(!o||!v){alert('Digite nome e valor');return}
-  let c=o.toLowerCase();
-  saldos[c]=(saldos[c]||0)+v;
-  nomes[c]=o;
-  document.getElementById('msgLiberar').innerText='Liberado R$ '+v+' para '+o;
-  atualizarTudo();
-}
-
-function salvarPedido(){
-  let o=document.getElementById('nomeRecarga').value.trim();
-  let v=parseFloat(document.getElementById('valorRecarga').value);
-  if(!o||!v){alert('Digite seu nome e valor');return}
-  pedidos.push({nome:o,valor:v,status:'pendente'});
-  document.getElementById('msgRecarga').innerText='Pedido salvo! Agora clique no botão azul para pagar';
-  atualizarTudo();
-}
-
-function aprovar(i){
-  let p=pedidos[i];
-  let c=p.nome.toLowerCase();
-  saldos[c]=(saldos[c]||0)+p.valor;
-  nomes[c]=p.nome;
-  p.status='aprovado';
-  alert('Aprovado R$ '+p.valor+' para '+p.nome);
-  atualizarTudo();
-}
-
-function rejeitar(i){
-  if(confirm('Rejeitar pedido de '+pedidos[i].nome+'?')){
-    pedidos.splice(i,1);
-    atualizarTudo();
+function atualizarTudo(){
+  let l=document.getElementById('listaSaldos'); let l2=document.getElementById('listaSaldosPagar');
+  l.innerHTML=''; l2.innerHTML='';
+  for(let k in saldos){
+    let txt=(nomes[k]||k)+': R$ '+Number(saldos[k]).toFixed(2)+'<br>';
+    l.innerHTML+=txt; l2.innerHTML+=txt;
   }
+  if(Object.keys(saldos).length===0){l.innerHTML='<small style=color:#666>Sem saldo - use o botão de teste</small>'; l2.innerHTML='<small style=color:#666>Sem saldo - clique em Adicionar Teste</small>'}
+  let lp=document.getElementById('listaPendentes'); lp.innerHTML=''; let tem=false;
+  for(let i=0;i<pedidos.length;i++){if(pedidos[i].status==='pendente'){tem=true; lp.innerHTML+=`<div class="pend"><b>${pedidos[i].nome}</b> - R$ ${pedidos[i].valor}<button class="btn btnVerde" onclick="aprovar(${i})">✅ Aprovar</button><button class="btn btnVermelho" onclick="rejeitar(${i})">❌ Rejeitar</button></div>`}}
+  if(!tem) lp.innerHTML='<small style=color:#666>Sem pendentes</small>';
+  salvar();
 }
 
-function descontar(){
-  let o=document.getElementById('nomePagar').value.trim();
-  let c=o.toLowerCase();
-  let v=parseFloat(document.getElementById('valorPagar').value);
+function adicionarTeste(){
+  let nome="Teste";
+  let c=nome.toLowerCase();
+  saldos[c]=(saldos[c]||0)+50;
+  nomes[c]=nome;
+  document.getElementById('msgPagar').innerText='✅ Adicionado R$50 para Teste - Agora tente descontar!';
+  document.getElementById('nomePagar').value="Teste";
+  atualizarTudo();
+}
+function liberarDireto(){
+  let o=document.getElementById('nomeLiberar').value.trim(); let v=parseFloat(document.getElementById('valorLiberar').value);
   if(!o||!v){alert('Digite nome e valor');return}
-  if((saldos[c]||0)<v){alert('Saldo insuficiente');return}
-  saldos[c]-=v;
-  document.getElementById('msgPagar').innerText='Descontado R$ '+v+' de '+o;
+  let c=o.toLowerCase(); saldos[c]=(saldos[c]||0)+v; nomes[c]=o;
+  document.getElementById('msgLiberar').innerText='Liberado R$ '+v+' para '+o; atualizarTudo();
+}
+function salvarPedido(){
+  let o=document.getElementById('nomeRecarga').value.trim(); let v=parseFloat(document.getElementById('valorRecarga').value);
+  if(!o||!v){alert('Digite');return}
+  pedidos.push({nome:o,valor:v,status:'pendente'}); document.getElementById('msgRecarga').innerText='Pedido salvo! Pague no azul'; atualizarTudo();
+}
+function aprovar(i){let p=pedidos[i];let c=p.nome.toLowerCase();saldos[c]=(saldos[c]||0)+p.valor;nomes[c]=p.nome;p.status='aprovado';alert('Aprovado!');atualizarTudo()}
+function rejeitar(i){pedidos.splice(i,1);atualizarTudo()}
+function descontar(){
+  let nome=document.getElementById('nomePagar').value.trim();
+  let chave=nome.toLowerCase();
+  let valor=parseFloat(document.getElementById('valorPagar').value);
+  if(!nome||!valor){alert('Digite nome e valor');return}
+  if(saldos[chave]==null){alert('Cliente "'+nome+'" não tem saldo. Clique em Adicionar Teste ou libere na Área do Dono');return}
+  if(saldos[chave]<valor){alert('Saldo insuficiente! Ele tem R$ '+saldos[chave].toFixed(2));return}
+  saldos[chave]-=valor;
+  document.getElementById('msgPagar').innerText='✅ DESCONTADO R$ '+valor+' de '+nome+' - Restou R$ '+saldos[chave].toFixed(2);
   atualizarTudo();
 }
 
 atualizarTudo();
-if(localStorage.getItem('canopus_dono')==='1'){abrir(3)}else{abrir(1)}
+if(localStorage.getItem('canopus_dono')==='1') abrir(3); else abrir(1);
 </script>
 </body>
 </html>
