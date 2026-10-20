@@ -19,123 +19,33 @@ input{width:100%;padding:12px;border-radius:12px;border:1.5px solid #0a7a5a;back
 </head>
 <body>
 <h2 id=titulo style=text-align:center;cursor:pointer onclick="cliqueSecreto()">🌿 Credito Canopus</h2>
-<div style=text-align:center;color:#0a5a44;font-size:11px>toque 5x no título para Área Dono</div>
 
 <div class=card>Saldo Total: R$ <span id=sg>0,00</span><div id=lg style=color:#6ee7b7;font-weight:700;margin-top:5px"></div></div>
-
-<div class=card style=border-color:#10b981>
-<b style=color:#10b981>👤 Área Cliente</b><br><br>
-Nome
-<input id=nLogin placeholder="Ex: Nanda">
-<button class=btn style=background:#fff;color:#000 onclick="entrar()">✅ Entrar</button>
-</div>
-
-<div class=card>
-<button class=btn style=background:#10b981;color:#000 onclick="ver(1)">1 Pagar</button>
-<button class=btn style=background:#fff;color:#000 onclick="ver(2)">2 Recarregar</button>
-<button id=btnDono class=btn style=background:#fbbf24;color:#000 onclick="ver(3)">3 Dono 🔒</button>
-<button class=btn style=background:#25D366;color:#fff;margin-top:12px" onclick="compartilhar()">📤 Compartilhar App</button>
-</div>
-
-<div id=a1 class=card>
-<b style=color:#10b981>1. Pagar no Mercadinho</b><br><br>
-<input id=vp type=number placeholder="Valor ex: 5">
-<button class=btn style=background:#10b981;color:#000 onclick="gerarQR()">Gerar QR Code</button>
-<div id=qrcode><img id=imgQR src=""><p id=txtQR style=color:#000;margin:5px 0 0 0"></p></div>
-<hr style=border-color:#0a5a44;margin:12px 0>
-Nome
-<input id=nd placeholder="Ex: Nanda">
-<input id=vd type=number placeholder="Valor ex: 5">
-<button class=btn style=background:#ef4444;color:#fff onclick="descontar()">Descontar do saldo</button>
-<p id=msg1 style=text-align:center;color:#6ee7b7"></p>
-</div>
-
-<div id=a2 class=card style=display:none>
-<b style=color:#10b981>2. Recarregar</b><br><br>
-Nome
-<input id=nRec placeholder="Ex: Nanda">
-<input id=vRec type=number placeholder="Valor ex: 20">
-<button class=btn style=background:#fbbf24;color:#000 onclick="preparar()">Salvar Pedido</button>
-<p id=msg2 style=text-align:center;color:#fbbf24"></p>
-<a id=linkMp href="https://link.mercadopago.com.br/dolarcanopus" target=_blank style=display:none;text-decoration:none>
-<button class=btn style=background:#009ee3;color:#fff">🛒 Pagar no Mercado Pago</button>
-</a>
-</div>
-
-<div id=a3 class=card style=display:none;border-color:#fbbf24>
-<b style=color:#fbbf24>🔒 Área Dono - SECRETA</b><br><br>
-<div id=areaSenha>
-<input id=senhaDono type=password placeholder="Senha do Dono">
-<button class=btn style=background:#fff;color:#000 onclick="checarSenha()">Entrar como Dono</button>
-</div>
-<div id=areaDono style=display:none>
-<b>Pedidos Pendentes:</b>
-<div id=listaPend></div>
-<hr style=border-color:#fbbf24;margin:12px 0>
-Nome
-<input id=nn placeholder="Ex: Nanda">
-<input id=vv type=number placeholder="Valor ex: 20">
-<button class=btn style=background:#fbbf24;color:#000 onclick="liberar()">Liberar Direto</button>
-<p id=m3 style=text-align:center;color:#fbbf24"></p>
-<hr style=border-color:#0a5a44;margin:12px 0>
-<b>Saldos:</b>
-<div id=lista style=line-height:28px;margin-top:10px"></div>
-<button class=btn style=background:#000;color:#666;border:1px solid #333;font-size:14px;margin-top:12px" onclick="if(confirm('Apagar TUDO?')){localStorage.clear();location.reload()}">Apagar tudo</button>
-<button class=btn style=background:#000;color:#888;border:1px solid #333;font-size:14px" onclick="sairDono()">Sair e Esconder Dono</button>
-</div>
-</div>
-
+<div class=card style=border-color:#10b981><b style=color:#10b981>👤 Área Cliente</b><br><br>Nome<input id=nLogin placeholder="Ex: Nanda"><button class=btn style=background:#fff;color:#000 onclick="entrar()">✅ Entrar</button></div>
+<div class=card><button class=btn style=background:#10b981;color:#000 onclick="ver(1)">1 Pagar</button><button class=btn style=background:#fff;color:#000 onclick="ver(2)">2 Recarregar</button><button id=btnDono class=btn style=background:#fbbf24;color:#000 onclick="ver(3)">3 Dono 🔒</button><button class=btn style=background:#25D366;color:#fff;margin-top:12px" onclick="compartilhar()">📤 Compartilhar App</button></div>
+<div id=a1 class=card><b style=color:#10b981>1. Pagar no Mercadinho</b><br><br><input id=vp type=number placeholder="Valor ex: 5"><button class=btn style=background:#10b981;color:#000 onclick="gerarQR()">Gerar QR Code</button><div id=qrcode><img id=imgQR src=""><p id=txtQR style=color:#000;margin:5px 0 0 0"></p></div><hr style=border-color:#0a5a44;margin:12px 0>Nome<input id=nd placeholder="Ex: Nanda"><input id=vd type=number placeholder="Valor ex: 5"><button class=btn style=background:#ef4444;color:#fff onclick="descontar()">Descontar do saldo</button><p id=msg1 style=text-align:center;color:#6ee7b7"></p></div>
+<div id=a2 class=card style=display:none><b style=color:#10b981>2. Recarregar</b><br><br>Nome<input id=nRec placeholder="Ex: Nanda"><input id=vRec type=number placeholder="Valor ex: 20"><button class=btn style=background:#fbbf24;color:#000 onclick="preparar()">Salvar Pedido</button><p id=msg2 style=text-align:center;color:#fbbf24"></p><a id=linkMp href="https://link.mercadopago.com.br/dolarcanopus" target=_blank style=display:none;text-decoration:none><button class=btn style=background:#009ee3;color:#fff">🛒 Pagar no Mercado Pago</button></a></div>
+<div id=a3 class=card style=display:none;border-color:#fbbf24><b style=color:#fbbf24>🔒 Área Dono - SECRETA</b><br><br><div id=areaSenha><input id=senhaDono type=password placeholder="Senha do Dono"><button class=btn style=background:#fff;color:#000 onclick="checarSenha()">Entrar como Dono</button></div><div id=areaDono style=display:none><b>Pedidos Pendentes:</b><div id=listaPend></div><hr style=border-color:#fbbf24;margin:12px 0>Nome<input id=nn placeholder="Ex: Nanda"><input id=vv type=number placeholder="Valor ex: 20"><button class=btn style=background:#fbbf24;color:#000 onclick="liberar()">Liberar Direto</button><p id=m3 style=text-align:center;color:#fbbf24"></p><hr style=border-color:#0a5a44;margin:12px 0><b>Saldos:</b><div id=lista style=line-height:28px;margin-top:10px"></div><button class=btn style=background:#000;color:#666;border:1px solid #333;font-size:14px;margin-top:12px" onclick="if(confirm('Apagar TUDO?')){localStorage.clear();location.reload()}">Apagar tudo</button><button class=btn style=background:#000;color:#888;border:1px solid #333;font-size:14px" onclick="sairDono()">Sair e Esconder Dono</button></div></div>
 <script>
-var SENHA="De@1mirene";
-var cliques=0;
+var SENHA="De@1mirene";var cliques=0;
 var saldos={};try{saldos=JSON.parse(localStorage.getItem('s')||'{}')}catch(e){}
 var nomes={};try{nomes=JSON.parse(localStorage.getItem('noms')||'{}')}catch(e){}
 var pedidos=[];try{pedidos=JSON.parse(localStorage.getItem('ped')||'[]')}catch(e){}
-var atual=localStorage.getItem('tit')||'';
-var donoLogado=localStorage.getItem('donoLog')=="1";
-
+var atual=localStorage.getItem('tit')||'';var donoLogado=localStorage.getItem('donoLog')=="1";
 function compartilhar(){
  var url="https://7-maker.github.io/Cr-dito-canopus/";
- var texto="🌿 Crédito Canopus - Meu app da cantina! Entra aí: ";
+ var texto="🌿 Crédito Canopus - Meu app da cantina! Entra aí: " + url;
  if(navigator.share){
-   navigator.share({title:'Crédito Canopus',text:texto,url:url});
- }else{
-   navigator.clipboard.writeText(texto+url);
-   alert('Link copiado! Cole no WhatsApp:\n'+url);
+   navigator.share({title:'Crédito Canopus',text:texto,url:url}).catch(function(){copiarLink(texto,url);});
+ }else{copiarLink(texto,url);}
+ function copiarLink(txt,link){
+   try{
+     var area=document.createElement('textarea');area.value=txt;area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();document.execCommand('copy');document.body.removeChild(area);
+     alert('✅ Link copiado! Abrindo WhatsApp...');
+     window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
+   }catch(e){prompt('Copie o link:',txt);}
  }
 }
-
 function cliqueSecreto(){cliques++;if(cliques>=5){cliques=0;var s=prompt('Senha do Dono:');if(s==SENHA){donoLogado=true;localStorage.setItem('donoLog','1');document.getElementById('btnDono').style.display='block';ver(3);checarSenhaAuto();}else if(s!=null){alert('Senha errada');}}}
-
 function checarSenhaAuto(){document.getElementById('areaSenha').style.display='none';document.getElementById('areaDono').style.display='block';upd();}
-
-function upd(){
- var t=0;for(var k in saldos)t+=saldos[k];
- document.getElementById('sg').innerText=t.toFixed(2);
- if(atual)document.getElementById('lg').innerText=(nomes[atual]||atual)+' - R$ '+(saldos[atual]||0).toFixed(2);
- var l=document.getElementById('lista');l.innerHTML='';for(var k in saldos)l.innerHTML+=(nomes[k]||k)+': R$ '+saldos[k].toFixed(2)+'<br>';
- var lp=document.getElementById('listaPend');lp.innerHTML='';
- if(pedidos.length==0)lp.innerHTML='<p style=color:#888;font-size:14px>Sem pedidos pendentes</p>';
- for(var i=0;i<pedidos.length;i++){
-   var p=pedidos[i];
-   if(p.status=='pendente'){
-     lp.innerHTML+='<div class=pendente><b>'+p.nome+'</b> - R$ '+p.valor+'<br><button class=btn style=background:#10b981;color:#000;padding:8px;margin-top:6px" onclick="aprovar('+i+')">✅ Aprovar - Já recebi</button> <button class=btn style=background:#ef4444;color:#fff;padding:8px;margin-top:6px" onclick="rejeitar('+i+')">❌ Rejeitar</button></div>';
-   }
- }
- localStorage.setItem('s',JSON.stringify(saldos));localStorage.setItem('noms',JSON.stringify(nomes));localStorage.setItem('ped',JSON.stringify(pedidos));
- if(donoLogado)document.getElementById('btnDono').style.display='block';
-}
-
-function checarSenha(){if(document.getElementById('senhaDono').value==SENHA){donoLogado=true;localStorage.setItem('donoLog','1');document.getElementById('areaSenha').style.display='none';document.getElementById('areaDono').style.display='block';document.getElementById('btnDono').style.display='block';upd();}else{alert('Senha errada');}}
-
-function sairDono(){donoLogado=false;localStorage.setItem('donoLog','0');document.getElementById('btnDono').style.display='none';document.getElementById('a3').style.display='none';document.getElementById('areaSenha').style.display='block';document.getElementById('areaDono').style.display='none';ver(1);}
-
-function entrar(){var o=document.getElementById('nLogin').value.trim();if(!o){alert('Digite nome');return}var c=o.toLowerCase();atual=c;nomes[c]=o;localStorage.setItem('tit',c);upd();ver(1);}
-
-function ver(n){document.getElementById('a1').style.display=n==1?'block':'none';document.getElementById('a2').style.display=n==2?'block':'none';document.getElementById('a3').style.display=n==3?'block':'none';}
-
-function gerarQR(){var v=document.getElementById('vp').value;if(!v){alert('Digite valor');return}document.getElementById('imgQR').src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Canopus-R$'+v;document.getElementById('txtQR').innerText='R$ '+v;document.getElementById('qrcode').style.display='block';}
-
-function liberar(){if(!donoLogado){alert('Só Dono!');return}var o=document.getElementById('nn').value.trim();var v=parseFloat(document.getElementById('vv').value);if(!o||!v){alert('Nome e valor');return}var c=o.toLowerCase();saldos[c]=(saldos[c]||0)+v;nomes[c]=o;document.getElementById('m3').innerText='Liberado R$ '+v+' pra '+o;document.getElementById('nn').value='';document.getElementById('vv').value='';upd();}
-
-function preparar(){var o=document.getElementById('nRec').value.trim();var v=parseFloat(document.getElementById('vRec').value);if(!o||!v){alert('Nome e valor');return}pedidos.push({nome:o,
+function upd(){var t=0;for(var k in saldos)t+=saldos[k];document.getElementById('sg').innerText=t.toFixed(2);if(atual)document.getElementById('lg').innerText=(nomes[atual]||atual)+' - R$ '+(saldos[atual]||0).toFixed(2);var l=document.getElementById('lista');l.innerHTML='';for(var k in saldos)l.innerHTML+=(nomes[k]||k)+': R$ '+saldos[k].toFixed(2)+'<br>';var lp=document.getElementById('listaPend');lp.innerHTML='';if(pedidos.length==0)lp.innerHTML='<p style=color:#888;font-size:14px>Sem pedidos pendentes</p>';for(var i=0;i<pedidos.length;i++){var p=pedidos[i];if(p.status=='pendente'){lp.innerHTML+='<div class=pendente><b>'+p.nome+'</b> - R$ '+p.valor+'<br><button class=btn style=background:#10b981;color:#000;padding:8px;margin-top:6px" onclick="aprovar('+i+')">✅ Aprovar - Já recebi</button> <button class=btn style=background:#ef4444;color:#fff;padding:8px;margin-top:6px" onclick="rejeitar('+i+')">❌ Rejeitar</button></div>';}}localStorage.setItem('s',JSON.stringify(saldos));localStorage.setItem('noms',JSON.stringify(nomes));localStorage.setItem('ped
