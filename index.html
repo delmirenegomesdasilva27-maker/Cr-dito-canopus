@@ -1,110 +1,63 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name=viewport content="width=device-width,initial-scale=1"><title>Canopus</title>
+<!DOCTYPE html><html lang=pt-BR><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Credito Canopus</title>
 <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
-body{background:#001a12;color:#fff;font-family:'Patrick Hand',cursive;padding:14px;max-width:400px;margin:auto;font-size:17px;letter-spacing:0.5px}
-.card{background:#022c1f;border:1px solid #0a7a5a;border-radius:14px;padding:14px;margin-top:12px}
-button{width:100%;padding:13px;border-radius:10px;border:none;font-weight:bold;margin-top:10px;font-size:17px;font-family:'Patrick Hand',cursive;letter-spacing:0.5px}
-input{width:100%;padding:12px;border-radius:10px;border:1px solid #0a7a5a;background:#001a12;color:#fff;margin-top:8px;box-sizing:border-box;font-size:17px;font-family:'Patrick Hand',cursive}
+*{font-family:'Patrick Hand',cursive;font-size:17px}
+body{background:#001a12;color:#fff;max-width:420px;margin:auto;padding:12px}
+.card{background:#022c1f;border:1.5px solid #0a7a5a;border-radius:18px;padding:14px;margin-top:14px}
+.btn{width:100%;padding:14px;border-radius:14px;border:none;font-weight:700;font-size:17px}
+input{width:100%;padding:13px;border-radius:12px;border:1.5px solid #0a7a5a;background:#001a12;color:#fff;margin-top:10px;box-sizing:border-box;font-size:17px}
+.tit{color:#10b981;font-weight:800;font-size:18px}
 </style></head><body>
-<h2 style=text-align:center;font-size:22px>Credito Canopus</h2>
-<div class=card>Saldo Total: R$ <span id=s>0,00</span><div id=lg style=color:#6ee7b7;margin-top:6px"></div></div>
-
+<h2 style=text-align:center;font-size:22px>🌿 Credito Canopus</h2>
+<div class=card>Saldo: R$ <span id=sg>0,00</span><div id=lg style=color:#6ee7b7;margin-top:6px;font-weight:700"></div></div>
 <div class=card>
-<input id=nome placeholder="Seu nome">
-<button style=background:#fff;color:#000 onclick="entrar()">Entrar</button>
+<span class=tit>Nome da crianca</span>
+<input id=nomeLogin placeholder="Ex: Nanda">
+<button class=btn style=background:#fff;color:#000;margin-top:12px onclick="entrar()">✅ Entrar</button>
 </div>
-
-<div class=card>
-<button style=background:#10b981 onclick="mostra(1)">1 Pagar</button>
-<button style=background:#fff;color:#000 onclick="mostra(2)">2 Recarregar</button>
-<button style=background:#fbbf24;color:#000 onclick="mostra(3)">3 Dono</button>
+<div class=card style=display:flex;flex-direction:column;gap:12px>
+<button class=btn style=background:#10b981;color:#000 onclick="ver(1)">1 Pagar</button>
+<button class=btn style=background:#fff;color:#000 onclick="ver(2)">2 Recarregar</button>
+<button class=btn style=background:#fbbf24;color:#000 onclick="ver(3)">3 Dono</button>
 </div>
-
 <div id=a1 class=card>
-<b>1 Pagar</b><br><br>
-Valor: <input id=v1 type=number placeholder="5">
-<button style=background:#ef4444;color:#fff onclick="pagar()">Descontar</button>
-<div id=m1 style=margin-top:10px"></div>
+<div class=tit>1. Pagar no Mercadinho</div>
+<input id=vp type=number placeholder="Valor ex: 5">
+<button class=btn style=background:#10b981;color:#000;margin-top:12px onclick="gerar()">Gerar QR Code</button>
+<div id=qrcode style=display:flex;justify-content:center;margin-top:14px;background:#fff;padding:10px;border-radius:12px"></div>
+<hr style=border-color:#0a5a44;margin:14px 0>
+<input id=nd placeholder="Nome ex: Nanda">
+<input id=vd type=number placeholder="Valor ex: 5">
+<button class=btn style=background:#ef4444;color:#fff;margin-top:12px onclick="descontar()">Descontar do saldo</button>
 </div>
-
 <div id=a2 class=card style=display:none>
-<b>2 Recarregar</b><br><br>
-Nome: <input id=nomeRec placeholder="Seu nome normal">
-Valor: <input id=valorRec type=number placeholder="20">
-<button style=background:#fbbf24;color:#000 onclick="salvar()">Salvar</button>
-<div id=msgSave style=margin-top:10px;font-weight:bold;color:#fbbf24"></div>
-<a id=linkMp href="https://link.mercadopago.com.br/dolarcanopus" target=_blank style=display:none><button style=background:#009ee3;color:#fff">Pagar no Mercado Pago</button></a>
+<div class=tit>2. Recarregar</div>
+<input id=nomeRec placeholder="Seu nome normal">
+<input id=valorRec type=number placeholder="Valor ex: 20">
+<button class=btn style=background:#fbbf24;color:#000;margin-top:12px onclick="salvar()">Salvar</button>
+<div id=msgSave style=margin-top:10px;color:#fbbf24"></div>
+<a id=linkMp href="https://link.mercadopago.com.br/dolarcanopus" target=_blank style=display:none;text-decoration:none><button class=btn style=background:#009ee3;color:#fff;margin-top:12px">🛒 Recarga no Mercado Pago</button></a>
 </div>
-
 <div id=a3 class=card style=display:none>
-<b>3 Dono - Liberar</b><br><br>
-Nome: <input id=n3 placeholder="Nome normal - como escreve">
-Valor: <input id=v3 type=number placeholder="20">
-<button style=background:#fbbf24;color:#000 onclick="lib()">Liberar</button>
-<div id=m3 style=color:#fbbf24;margin-top:10px"></div>
-<div id=lista style=margin-top:10px"></div>
+<div class=tit style=color:#fbbf24>3. Area do Dono - Liberar</div>
+<input id=nn placeholder="Nome normal">
+<input id=vv type=number placeholder="Valor ex: 20">
+<button class=btn style=background:#fbbf24;color:#000;margin-top:12px onclick="liberar()">Liberar Credito</button>
+<div id=m3 style=text-align:center;color:#fbbf24;margin-top:12px;font-weight:700"></div>
+<div id=lista style=line-height:28px;margin-top:10px"></div>
 </div>
-
 <script>
-var saldos={}; try{saldos=JSON.parse(localStorage.getItem('s')||'{}')}catch(e){}
-var nomeAtual=localStorage.getItem('tit')||'';
-var nomesOriginais={}; try{nomesOriginais=JSON.parse(localStorage.getItem('noms')||'{}')}catch(e){}
-function atualiza(){
- var tot=0; for(var k in saldos) tot+=saldos[k];
- document.getElementById('s').innerText=tot.toFixed(2);
- if(nomeAtual){ 
-   var orig = nomesOriginais[nomeAtual] || nomeAtual;
-   document.getElementById('lg').innerText=orig+' - R$ '+(saldos[nomeAtual]||0).toFixed(2); 
- }
- var l=document.getElementById('lista'); l.innerHTML='';
- for(var k in saldos){ var orig=nomesOriginais[k]||k; l.innerHTML+=orig+': R$ '+saldos[k]+'<br>'; }
- localStorage.setItem('s',JSON.stringify(saldos));
- localStorage.setItem('noms',JSON.stringify(nomesOriginais));
-}
-function entrar(){
- var original=document.getElementById('nome').value.trim();
- if(!original){alert('digita nome');return}
- var chave=original.toLowerCase();
- nomeAtual=chave; nomesOriginais[chave]=original; localStorage.setItem('tit',chave); atualiza(); mostra(1);
-}
-function mostra(n){document.getElementById('a1').style.display=n==1?'block':'none'; document.getElementById('a2').style.display=n==2?'block':'none'; document.getElementById('a3').style.display=n==3?'block':'none';}
-function lib(){
- var original=document.getElementById('n3').value.trim();
- if(!original){alert('nome');return}
- var chave=original.toLowerCase();
- var v=parseFloat(document.getElementById('v3').value);
- if(!v){alert('valor');return}
- saldos[chave]=(saldos[chave]||0)+v;
- nomesOriginais[chave]=original;
- document.getElementById('m3').innerText='Liberado R$ '+v+' pra '+original;
- document.getElementById('n3').value=''; document.getElementById('v3').value='';
- atualiza();
-}
-function salvar(){
- var original=document.getElementById('nomeRec').value.trim();
- var v=parseFloat(document.getElementById('valorRec').value);
- if(!original||!v){alert('nome e valor');return}
- localStorage.setItem('pendente_nome', original.toLowerCase());
- localStorage.setItem('pendente_original', original);
- localStorage.setItem('pendente_valor', v);
- document.getElementById('msgSave').innerText='Salvo: '+original+' R$ '+v;
- document.getElementById('linkMp').style.display='block';
-}
-function pagar(){
- var n=nomeAtual;
- var v=parseFloat(document.getElementById('v1').value);
- if(!n||!v){alert('entra e digita valor');return}
- if((saldos[n]||0)<v){alert('sem saldo');return}
- saldos[n]-=v;
- document.getElementById('m1').innerText='Descontado! Saldo: R$ '+saldos[n];
- document.getElementById('v1').value='';
- atualiza();
-}
-if(window.location.search.includes('pago') || window.location.search.includes('status')){
- var np=localStorage.getItem('pendente_nome');
- var origP=localStorage.getItem('pendente_original')||np;
- var vp=parseFloat(localStorage.getItem('pendente_valor'));
- if(np && vp){ saldos[np]=(saldos[np]||0)+vp; nomesOriginais[np]=origP; localStorage.removeItem('pendente_nome'); localStorage.removeItem('pendente_original'); localStorage.removeItem('pendente_valor'); atualiza(); alert('Liberado automatico R$ '+vp+' pra '+origP); nomeAtual=np; localStorage.setItem('tit',np); }
-}
-atualiza(); mostra(1);
+let saldos={};try{saldos=JSON.parse(localStorage.getItem('s')||'{}')}catch(e){}
+let nomes={};try{nomes=JSON.parse(localStorage.getItem('noms')||'{}')}catch(e){}
+let atual=localStorage.getItem('tit')||'';
+function upd(){let t=0;for(let k in saldos)t+=saldos[k];document.getElementById('sg').innerText=t.toFixed(2).replace('.',',');if(atual){document.getElementById('lg').innerText=(nomes[atual]||atual)+' - R$ '+(saldos[atual]||0).toFixed(2);}let l=document.getElementById('lista');l.innerHTML='';for(let k in saldos)l.innerHTML+=(nomes[k]||k)+': R$ '+saldos[k].toFixed(2)+'<br>';localStorage.setItem('s',JSON.stringify(saldos));localStorage.setItem('noms',JSON.stringify(nomes));}
+function entrar(){let o=document.getElementById('nomeLogin').value.trim();if(!o){alert('Digite nome');return}let c=o.toLowerCase();atual=c;nomes[c]=o;localStorage.setItem('tit',c);upd();ver(1);}
+function ver(n){document.getElementById('a1').style.display=n==1?'block':'none';document.getElementById('a2').style.display=n==2?'block':'none';document.getElementById('a3').style.display=n==3?'block':'none';}
+function liberar(){let o=document.getElementById('nn').value.trim();if(!o){alert('Nome');return}let v=parseFloat(document.getElementById('vv').value);if(!v){alert('Valor');return}let c=o.toLowerCase();saldos[c]=(saldos[c]||0)+v;nomes[c]=o;document.getElementById('m3').innerText='Liberado R$ '+v+' pra '+o;document.getElementById('nn').value='';document.getElementById('vv').value='';upd();}
+function salvar(){let o=document.getElementById('nomeRec').value.trim();let v=parseFloat(document.getElementById('valorRec').value);if(!o||!v){alert('Nome e valor');return}localStorage.setItem('pendente_nome',o.toLowerCase());localStorage.setItem('pendente_orig',o);localStorage.setItem('pendente_valor',v);document.getElementById('msgSave').innerText='Salvo: '+o+' R$ '+v;document.getElementById('linkMp').style.display='block';}
+function gerar(){let v=document.getElementById('vp').value;if(!v){alert('Valor');return}let d=document.getElementById('qrcode');d.innerHTML='';new QRCode(d,{text:'canopus:'+v,width:160,height:160});}
+function descontar(){let o=document.getElementById('nd').value.trim()||nomes[atual]||atual;if(!o){alert('Nome');return}let c=o.toLowerCase();let v=parseFloat(document.getElementById('vd').value);if(!v){alert('Valor');return}if((saldos[c]||0)<v){alert('Sem saldo');return}saldos[c]-=v;upd();}
+if(location.search.includes('pago')||location.search.includes('status')){let np=localStorage.getItem('pendente_nome');let op=localStorage.getItem('pendente_orig')||np;let vp=parseFloat(localStorage.getItem('pendente_valor'));if(np&&vp){saldos[np]=(saldos[np]||0)+vp;nomes[np]=op;localStorage.removeItem('pendente_nome');localStorage.removeItem('pendente_orig');localStorage.removeItem('pendente_valor');upd();alert('Liberado R$ '+vp+' pra '+op);}}
+upd();ver(1);
 </script></body></html>
